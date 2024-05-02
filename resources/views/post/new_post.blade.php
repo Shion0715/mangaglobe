@@ -1,0 +1,42 @@
+<x-app-layout>
+    <x-slot name="header">
+        @include('layouts.header')
+    </x-slot>
+
+    {{-- 投稿一覧表示用のコード --}}
+
+    <div class="max-w-full mx-auto mb-10 px-4 sm:px-6 lg:px-8">
+
+        <div class="mx-0 sm:p-8">
+            <div class="mt-4">
+                <div class="container">
+                    <div class="flex items-center justify-between p-1 pl-3 pr-1 mb-1">
+                        <div class="col-span-12 mb-4 m-0 p-0 px-1 py-0 inline-block text-2xl">
+                            Newest Posts
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                        @foreach ($new_posts as $index => $post)
+                        <div class="flex flex-col item-center mt-1 m-3 mx-auto">
+                            <!-- 番号 -->
+                            <span class="text-sm text-gray-500 text-xl font-bold mb-1">{{ $index + 1 }}</span>
+                            <!-- cover画像 -->
+                            <a href="{{ route('post.show', $post) }}">
+                                <img src="{{ $post->cover_image }}" class="" style="height:auto; width:200px">
+                            </a>
+                            <!-- タイトル -->
+                            <h1 class="text-lg text-gray-700 font-semibold hover:underline cursor-pointer float-left ranking-post-title">
+                                <a href="{{ route('post.show', $post) }}">{{ $post->title }}</a>
+                            </h1>
+                            <!-- 名前 -->
+                            <h1 class="text-lg text-gray-700 font-nomal hover:underline cursor-pointer float-left ranking-user-name">
+                                <a href="{{ route('auther.index', ['user' => $post->user->id]) }}">{{ $post->user->name }}</a>
+                            </h1>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</x-app-layout>

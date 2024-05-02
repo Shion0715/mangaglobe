@@ -1,5 +1,5 @@
 let cropper;
-let defaultImage = '/storage/public/avatar/default.jpeg'; // デフォルトの画像のパスを設定します。
+let defaultImage = '/storage/public/avatar/user_default.jpg'; // デフォルトの画像のパスを設定します。
 
 document.getElementById('avatar').addEventListener('change', function (e) {
     let file = e.target.files[0];

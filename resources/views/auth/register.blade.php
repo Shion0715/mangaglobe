@@ -35,7 +35,7 @@
         </div>
 
         <!-- Avatar -->
-        <div class="mt-6">
+        <!-- <div class="mt-6">
             <x-input-label for="avatar" :value="__('Profile image (Up to 1MB : optional)')" />
             <div class="avatar-upload">
                 <div class="avatar-edit">
@@ -50,7 +50,7 @@
         </div>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.6/cropper.min.js"></script>
-        <script src="{{ asset('js/avatar_cropper.js') }}"></script>
+        <script src="{{ asset('js/avatar_cropper.js') }}"></script> -->
 
         <!-- Profile -->
         <div class="mt-6">

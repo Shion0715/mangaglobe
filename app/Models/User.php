@@ -11,7 +11,7 @@ use App\Notifications\NewVerifyEmail;
 
 class User extends Authenticatable  implements MustVerifyEmail
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -81,10 +81,7 @@ class User extends Authenticatable  implements MustVerifyEmail
         return $this->hasMany(EpImage::class);
     }
 
-    public function sendEmailVerificationNotification()
-    {
-        $this->notify(new NewVerifyEmail());
-    }
+
 
     public function cash()
     {
