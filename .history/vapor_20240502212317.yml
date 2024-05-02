@@ -10,7 +10,7 @@ environments:
             - 'COMPOSER_MIRROR_PATH_REPOS=1 composer install --no-dev'
             - 'php artisan event:cache'
           # - 'npm ci && npm run build && rm -rf node_modules'
-        storage: mangaglobe-storage
+        storage: mangaglobe
         memory: 1024
         build:
             - 'composer install --no-dev'
