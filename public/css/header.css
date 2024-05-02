@@ -1,0 +1,27 @@
+.dropdown-link {
+    display: block;
+    width: 100%;
+    padding: 0.25rem 0.5rem;
+    text-align: start;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    color: #4299e1;
+    transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out;
+}
+
+.dropdown-link:hover,
+.dropdown-link:focus {
+    background-color: #f7fafc;
+    outline: none;
+}
+
+.dropdown-link.active {
+    background-color: transparent;
+    color: #4299e1;
+}
+
+@media (min-width: 640px) {
+    .dropdown-link {
+        padding: 0.25rem 0.5rem;
+    }
+}

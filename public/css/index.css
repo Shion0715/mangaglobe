@@ -1,0 +1,89 @@
+/* スクロール可能な幅を設定 */
+.scroll-container {
+    overflow-x: auto;
+    /* 横スクロールを有効にする */
+    width: 100%;
+    /* 画面幅いっぱいに広がるようにする */
+    max-width: 100%;
+    /* 最大幅を画面幅に設定 */
+}
+
+/* スライドのスタイル */
+.multiple {
+    display: flex;
+    flex-wrap: nowrap;
+    /* 子要素を横に並べるために必要 */
+    padding: 10px;
+    /* 左右の余白を設定 */
+}
+
+/* 画像のスタイル */
+.multiple > div {
+    flex: 0 0 auto;
+    /* 子要素を横に並べる */
+    margin-right: 30px;
+    /* 画像の間隔を調整 */
+}
+
+.slide {
+    padding: 0 10px;  /* 左右に10pxのパディングを追加 */
+    /* その他のスタイル */
+}
+
+.multiple img {
+    width: 200px;
+    /* 画像の幅を統一 */
+    height: auto;
+    /* 画像の高さを自動調整 */
+}
+
+@media (max-width: 640px) {
+    .multiple img {
+        width: 150px;
+        /* 画像の幅を半分に */
+    }
+}
+
+.index-post-title {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.8em;
+    height: 2.0em;
+    /* 2行の高さ */
+    word-wrap: break-word;
+    /* 単語が要素の幅を超える場合に単語を改行 */
+}
+
+@media (max-width: 640px) {
+    .index-post-title {
+        max-width: 8em;
+        /* 9chを適切なem値に変更 */
+    }
+}
+
+@media (min-width: 641px) {
+    .index-post-title {
+        max-width: 11em;
+        /* 18chを適切なem値に変更 */
+    }
+}
+
+.user-name {
+    max-width: 110px;
+    /* 適切な幅に調整 */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+@media (min-width: 640px) {
+
+    /* 768px以上のデバイス（PC版）で適用 */
+    .user-name {
+        max-width: 158px;
+        /* PC版の幅に調整 */
+    }
+}

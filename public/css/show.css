@@ -1,0 +1,20 @@
+.show-cover-image {
+    width: 200px;  /* スマホの画像幅 */
+    height: auto;  /* 画像の高さを自動調整 */
+}
+
+/* 画面幅が640px以上（iPad）の場合 */
+@media (min-width: 640px) {
+    .show-cover-image {
+        width: auto;  /* iPadの画像幅 */
+        height: 400px;  /* 画像の高さを自動調整 */
+    }
+}
+
+/* 画面幅が1024px以上（PC）の場合 */
+@media (min-width: 1024px) {
+    .show-cover-image {
+        width: 280px;  /* PCの画像幅 */
+        height: auto;  /* 画像の高さを自動調整 */
+    }
+}

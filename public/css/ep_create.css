@@ -1,0 +1,41 @@
+.img-div {
+    position: relative;
+    width: 24%;
+    display: inline-block;
+    margin: 5px;
+}
+
+.image {
+    opacity: 1;
+    display: block;
+    max-width: 100%;
+    height: auto;
+    transition: .5s ease;
+    backface-visibility: hidden;
+}
+
+.middle {
+    transition: .5s ease;
+    opacity: 1;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.img-div:hover .image {
+    opacity: 0.3;
+}
+
+.img-number {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: rgba(255, 255, 255, 0.7);
+    padding: 2px 5px;
+    border-radius: 50%;
+    color: black;
+    font-weight: bold;
+}
