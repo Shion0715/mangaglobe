@@ -12,7 +12,7 @@
                 <div class="flex w-full mt-4">
                     <div class="w-24 h-24 sm:w-48 sm:h-48 overflow-hidden mr-8 flex-shrink-0">
                         {{-- アバター表示 --}}
-                        <img src="{{$user->avatar ?? 'user_default.jpg'}}" class="w-full h-full object-cover">
+                        <img id="avatar_preview" src="{{ $user->avatar != 'user_default.jpg' ? $user->avatar : asset('storage/avatar/user_default.jpg') }}"  class="w-full h-full object-cover">
                     </div>
                     <div>
                         <div class="flex flex-col">

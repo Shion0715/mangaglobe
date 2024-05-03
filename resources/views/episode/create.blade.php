@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <form method="post" action="{{ route('post.ep_store', $post) }}" enctype="multipart/form-data">
+        <form method="post" action="{{ route('episode.store', $post) }}" enctype="multipart/form-data">
             @csrf
             <div style="display: flex; align-items: center;">
                 <h2 class="mx-2 font-semibold text-xl text-gray-800 leading-tight">

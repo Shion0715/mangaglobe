@@ -37,7 +37,7 @@
                                             <x-primary-button class="float-right ml-4">edit</x-primary-button>
                                         </form>
 
-                                        <form method="get" action="{{route('post.ep_create', $post)}}">
+                                        <form method="get" action="{{route('episode.create', $post)}}">
                                             @csrf
                                             <x-primary-button class="float-right ml-4">create</x-primary-button>
                                         </form>

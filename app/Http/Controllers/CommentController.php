@@ -51,12 +51,12 @@ class CommentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Post $post)
+    public function show(Post $post, Request $request)
     {
-        // 投稿に紐づくコメントを取得
-        $comments = $post->comments()->paginate(15);
+        $order = $request->get('order', 'desc');
+        
+        $comments = $post->comments()->orderBy('created_at', $order)->paginate(15);
 
-        // コメントをビューに渡す
         return view('comments.show', compact('comments', 'post'));
     }
 

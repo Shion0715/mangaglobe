@@ -88,9 +88,8 @@
                 <div>
                     <div class="mt-10 font-semibold leading-none">Genre (action,fantasy,sports, etc)</div>
                     <div class="flex mt-4 flex-wrap">
-                        @for ($i = 0; $i < 5; $i++) 
-                        <input type="text" name="tags[]" id="tags{{ $i }}" class="w-32 h-8 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300 mr-4 mb-3 sm:mb-0">
-                        @endfor
+                        @for ($i = 0; $i < 5; $i++) <input type="text" name="tags[]" id="tags{{ $i }}" class="w-32 h-8 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300 mr-4 mb-3 sm:mb-0">
+                            @endfor
                     </div>
                 </div>
 
@@ -132,9 +131,33 @@
                     </div>
                 </div>
 
-                <x-primary-button class="my-10">
-                    Create Chapter 1
-                </x-primary-button>
+                <form onsubmit="return validateTerms();">
+                    <div class="w-full flex flex-col mt-10">
+                        <div class="flex items-center">
+                            <input id="terms" type="checkbox" name="terms" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" {{ old('terms') ? 'checked' : '' }}>
+                            <label for="terms" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                                I agree to the <a href="/terms" target="_blank" class="text-blue-500">Terms of Service</a>
+                            </label>
+                            @error('terms')
+                            <p class="text-red-500 font-semibold leading-none">&nbsp;{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <x-primary-button class="my-10">
+                        Create Chapter 1
+                    </x-primary-button>
+                </form>
+
+                <script>
+                    function validateTerms() {
+                        if (!document.getElementById('terms').checked) {
+                            alert('You must agree to the terms of service before proceeding.');
+                            return false;
+                        }
+                        return true;
+                    }
+                </script>
 
             </form>
         </div>

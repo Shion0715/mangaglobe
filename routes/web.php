@@ -69,9 +69,8 @@ Route::middleware(['auth'])->group(function () {
     Route::patch('/post/{post}/{episode}', [EpisodeController::class, 'update'])->name('episode.update');
     Route::delete('/chapter/{episode}', [EpisodeController::class, 'destroy'])->name('episode.destroy');
     // episode create
-    Route::get('/post/{post}/ep_create', [PostController::class, 'ep_create'])->name('post.ep_create');
-    Route::post('/post/ep_store/{post}', [PostController::class, 'ep_store'])->name('post.ep_store');
-    Route::post('/posts/media/upload', [PostController::class, 'upload'])->name('posts.media.upload');
+    Route::get('/post/{post}/chapter/create', [EpisodeController::class, 'create'])->name('episode.create');
+    Route::post('/post/{post}/chapter/store', [EpisodeController::class, 'store'])->name('episode.store');
     // commnent
     Route::post('post/comment/store', [CommentController::class, 'store'])->name('comment.store');
     Route::delete('post/comment/{comment}', [CommentController::class, 'destroy'])->name('comment.destroy');

@@ -33,10 +33,10 @@
                                             <div class="flex mt-3">
                                                 <!-- アバター -->
                                                 <div class="w-7 h-7 sm:w-9 h-9 overflow-hidden">
-                                                    <img src="{{$post->user->avatar ?? 'user_default.jpg'}}">
+                                                    <img id="avatar_preview" src="{{ $post->user->avatar != 'user_default.jpg' ? $post->user->avatar : asset('storage/avatar/user_default.jpg') }}" class="object-contain">
                                                 </div>
                                                 <!-- 名前 -->
-                                                <h1 class="text-lg text-gray-700 font-normal hover:underline ml-2 user-name">
+                                                <h1 class="text-lg text-gray-700 font-normal hover:underline ml-2 sm:mt-2 user-name">
                                                     <a href="{{route('auther.index',  ['user' => $post->user->id])}}">{{ $post->user->name }}</a>
                                                 </h1>
                                             </div>
@@ -78,7 +78,7 @@
                                             <div class="flex mt-3">
                                                 <!-- アバター -->
                                                 <div class="w-7 h-7 sm:w-9 h-9 overflow-hidden">
-                                                    <img src="{{$post->user->avatar ?? 'user_default.jpg'}}">
+                                                    <img id="avatar_preview" src="{{ $post->user->avatar != 'user_default.jpg' ? $post->user->avatar : asset('storage/avatar/user_default.jpg') }}" class="object-contain">
                                                 </div>
                                                 <!-- 名前 -->
                                                 <h1 class="text-lg text-gray-700 font-normal hover:underline ml-2 sm:mt-2 user-name">

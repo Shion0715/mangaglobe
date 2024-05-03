@@ -14,15 +14,19 @@
         @forelse ($comments as $comment)
         <div class="mt-4 bg-white shadow overflow-hidden sm:rounded-lg">
             <div class="px-4 py-5 sm:px-6">
-                <h3 class="text-lg leading-6 font-medium text-gray-900">
-                    {{ $comment->user->name }}
-                </h3>
-                <p class="mt-1 max-w-2xl text-sm text-gray-500">
+                <div class="flex">
+                    <!-- Replace with user avatar -->
+                    <img class="h-7 w-7 sm:h-9 sm:w-9" src="{{ $comment->user->avatar != 'user_default.jpg' ? $comment->user->avatar : asset('storage/avatar/user_default.jpg') }}">
+                    <h3 class="mt-1 ml-2 sm:mt-2 text-lg leading-6 font-medium text-gray-900">
+                        {{ $comment->user->name }}
+                    </h3>
+                </div>
+                <p class="mt-1 text-md text-gray-800">
                     {{ $comment->body }}
                 </p>
                 <div class="mt-2 flex text-right">
                     <!-- Report button -->
-                    <button class="text-xs">
+                    <button class="text-xs text-blue-500 h-7">
                         <i class="fas fa-flag"></i> Report
                     </button>
                     <!-- Delete button (visible to the author of the comment or the post) -->
@@ -30,7 +34,7 @@
                     <form action="{{ route('comment.destroy', $comment) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this comment?');">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="text-xs ml-2">
+                        <button type="submit" class="text-xs ml-2 text-red-500 h-7">
                             <i class="fas fa-trash"></i> Delete
                         </button>
                     </form>

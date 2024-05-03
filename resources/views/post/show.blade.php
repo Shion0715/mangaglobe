@@ -103,7 +103,7 @@
                     <div class="flex items-center">
                         <div class="flex-shrink-0">
                             <!-- Replace with user avatar -->
-                            <img class="h-10 w-10" src="{{ $comment->user->avatar ?? 'default-avatar.png' }}" alt="{{ $comment->user->name }}">
+                            <img class="h-10 w-10" src="{{ $user->avatar != 'user_default.jpg' ? $user->avatar : asset('storage/avatar/user_default.jpg') }}"  alt="{{ $comment->user->name }}">
                         </div>
                         <div class="ml-3">
                             <p class="text-sm font-medium text-gray-900">

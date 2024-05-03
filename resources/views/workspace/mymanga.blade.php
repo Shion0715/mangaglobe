@@ -64,7 +64,7 @@
                                                 <ul class="dropdown-menu absolute hidden right-0 text-gray-700 pt-1">
                                                     <li class=""><a class="rounded-t bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap" href="{{route('post.edit', $post)}}">Edit Manga</a></li>
                                                     <li class=""><a class="bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap" href="{{route('episode.index_edit', $post)}}">Edit Chapter</a></li>
-                                                    <li class=""><a class="bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap" href="{{route('post.ep_create', $post)}}">Create</a></li>
+                                                    <li class=""><a class="bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap" href="{{route('episode.create', $post)}}">Create</a></li>
                                                     @can('delete', $post)
                                                     <li class=""><a class="bg-red-200 hover:bg-red-400 py-2 px-4 block whitespace-no-wrap" href="{{route('post.destroy', $post->id)}}" onClick="return confirm('Are you sure you want to delete？');">Delete</a></li>
                                                     @endcan
@@ -111,7 +111,7 @@
 
                                         <a href="{{route('episode.index_edit', $post)}}" class="float-right ml-4"><i class="fas fa-file-alt"></i> Edit Chapter</a>
 
-                                        <a href="{{route('post.ep_create', $post)}}" class="float-right ml-4"><i class="fas fa-plus-circle"></i> Post New Chapter</a>
+                                        <a href="{{route('episode.create', $post)}}" class="float-right ml-4"><i class="fas fa-plus-circle"></i> Post New Chapter</a>
 
                                         @can('delete', $post)
                                         <form id="deleteForm-{{ $post->id }}" method="post" action="{{route('post.destroy', $post->id)}}">
