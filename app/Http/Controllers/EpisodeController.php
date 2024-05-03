@@ -43,6 +43,13 @@ class EpisodeController extends Controller
         $episode->number = $request->input('episode_number');
 
         // カバー画像の保存
+        $storage = new StorageClient([
+            'projectId' => env('GOOGLE_CLOUD_PROJECT_ID'),
+            'keyFilePath' => env('GOOGLE_CLOUD_KEY_FILE'),
+        ]);
+
+        $bucket = $storage->bucket('mangaglobe');
+
         if (preg_match('/^data:image\/(\w+);base64,/', request('cropped_ep_cover_image'), $type)) {
             $data = substr(request('cropped_ep_cover_image'), strpos(request('cropped_ep_cover_image'), ',') + 1);
             $type = strtolower($type[1]); // jpg, png, gif
@@ -59,14 +66,17 @@ class EpisodeController extends Controller
 
             $name = date('Ymd_His') . '.' . $type;
 
-            // Save the file to local storage
-            $path = storage_path('app/public/ep_cover_images/' . $name);
-            file_put_contents($path, $data);
+            // Google Cloud Storageに画像をアップロード
+            $bucket->upload(
+                $data,
+                [
+                    'name' => 'ep_cover_images/' . $name,
+                    'uniformBucketLevelAccess' => true
+                ]
+            );
 
-            // Get the public URL of the saved file
-            $episode->cover_image = asset('storage/ep_cover_images/' . $name);
-        } else {
-            return back()->with('error', 'Invalid image format');
+            // Get the public URL of the uploaded file
+            $episode->cover_image = 'https://storage.googleapis.com/' . env('GOOGLE_CLOUD_BUCKET_NAME') . '/ep_cover_images/' . $name;
         }
         $episode->save();
 
@@ -81,11 +91,16 @@ class EpisodeController extends Controller
             foreach ($request->file('images') as $key => $image) {
                 $imageName = date('Ymd_His') . '_' . $image->getClientOriginalName();
 
-                // Save the file to local storage
-                $path = storage_path('app/public/ep_images/' . $imageName);
-                file_put_contents($path, file_get_contents($image->getRealPath()));
+                // Google Cloud Storageに画像をアップロード
+                $bucket->upload(
+                    file_get_contents($image->getRealPath()),
+                    [
+                        'name' => 'ep_images/' . $imageName,
+                        'uniformBucketLevelAccess' => true
+                    ]
+                );
 
-                $imageURL = asset('storage/ep_images/' . $imageName);
+                $imageURL = 'https://storage.googleapis.com/' . env('GOOGLE_CLOUD_BUCKET_NAME') . '/ep_images/' . $imageName;
 
                 $epImages[] = [
                     'image' => $imageURL,
@@ -166,16 +181,20 @@ class EpisodeController extends Controller
         return view('episode.index_edit', compact('episodes', 'post'));
     }
 
-    public function edit(Post $post, Episode $episode)
+    public function edit(Post $post, Episode $episode, Request $request)
     {
-        $this->authorize('update', $post);
+        if ($request->user()->cannot('update', $episode)) {
+            abort(403);
+        }
 
         return view('episode.edit', compact('post', 'episode'));
     }
 
     public function update(Post $post, Episode $episode, Request $request)
     {
-        $this->authorize('update', $episode);
+        if ($request->user()->cannot('update', $episode)) {
+            abort(403);
+        }
 
         if ($episode->user_id !== auth()->user()->id) {
             return back()->with('error', 'You do not have permission to edit this episode');
@@ -196,10 +215,10 @@ class EpisodeController extends Controller
         // カバー画像の保存
         $storage = new StorageClient([
             'projectId' => env('GOOGLE_CLOUD_PROJECT_ID'),
-            'keyFilePath' => '/home/xs209264/xs209264.xsrv.jp/public_html/laravel_manga/storage/json/nice-beanbag-420411-68c05e2519d2.json',
+            'keyFilePath' => env('GOOGLE_CLOUD_KEY_FILE'),
         ]);
 
-        $bucket = $storage->bucket('laravel-project');
+        $bucket = $storage->bucket('mangaglobe');
 
         if (preg_match('/^data:image\/(\w+);base64,/', request('cropped_ep_cover_image'), $type)) {
             $data = substr(request('cropped_ep_cover_image'), strpos(request('cropped_ep_cover_image'), ',') + 1);
@@ -236,10 +255,10 @@ class EpisodeController extends Controller
 
         $storage = new StorageClient([
             'projectId' => env('GOOGLE_CLOUD_PROJECT_ID'),
-            'keyFilePath' => '/home/xs209264/xs209264.xsrv.jp/public_html/laravel_manga/storage/json/nice-beanbag-420411-68c05e2519d2.json',
+            'keyFilePath' => env('GOOGLE_CLOUD_KEY_FILE'),
         ]);
 
-        $bucket = $storage->bucket('laravel-project');
+        $bucket = $storage->bucket('mangaglobe');
 
         $newEpImages = []; // 新しい配列を作成
         $episodeNumber = $episode->number;
@@ -293,14 +312,16 @@ class EpisodeController extends Controller
         return redirect()->route('mymanga')->with('message', 'Chapter updated successfully');
     }
 
-    public function destroy(Post $post, Episode $episode)
+    public function destroy(Post $post, Episode $episode, Request $request)
     {
-        $this->authorize('delete', $episode);
+        if ($request->user()->cannot('delete', $episode)) {
+            abort(403);
+        }
 
         // Google Cloud Storageの設定
         $storage = new StorageClient([
             'projectId' => env('GOOGLE_CLOUD_PROJECT_ID'),
-            'keyFilePath' => '/home/xs209264/xs209264.xsrv.jp/public_html/laravel_manga/storage/json/nice-beanbag-420411-68c05e2519d2.json',
+            'keyFilePath' => env('GOOGLE_CLOUD_KEY_FILE'),
         ]);
 
         $bucket = $storage->bucket(env('GOOGLE_CLOUD_BUCKET_NAME'));

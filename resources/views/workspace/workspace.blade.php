@@ -104,7 +104,7 @@
                     @forelse ($comments as $comment)
                     <div class="p-4 border-b border-gray-200">
                         <div class="flex items-center">
-                            <img class="h-10 w-10 mr-3" src="{{ $comment->user->avatar }}" alt="{{ $comment->user->name }}">
+                            <img class="h-10 w-10 mr-3" src="{{ $comment->user->avatar != 'user_default.jpg' ? $comment->user->avatar : asset('storage/avatar/user_default.jpg') }}" alt="{{ $comment->user->name }}">
                             <div>
                                 <p class="text-gray-800 font-bold">{{ $comment->user->name }}</p>
                                 <p class="text-gray-600 text-sm">{{ $comment->created_at->diffForHumans() }}</p>

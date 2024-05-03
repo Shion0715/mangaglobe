@@ -54,7 +54,7 @@
                                         <div class="flex mt-5">
                                             <div class="rounded-full w-10 h-10">
                                                 {{-- アバター表示 --}}
-                                                <img src="{{$post->user->avatar ?? 'user_default.jpg'}}">
+                                                <img src="{{ $post->user->avatar != 'user_default.jpg' ? $post->user->avatar : asset('storage/avatar/user_default.jpg') }}">
                                             </div>
                                             <!-- 名前 -->
                                             <h1 class="text-lg text-gray-700 font-nomal hover:underline m-1 ml-3 cursor-pointer float-left">
@@ -94,7 +94,7 @@
                                         <div class="flex mt-5">
                                             <div class="rounded-full w-10 h-10">
                                                 {{-- アバター表示 --}}
-                                                <img src="{{$like->post->user->avatar ?? 'user_default.jpg'}}">
+                                                <img src="{{ $post->user->avatar != 'user_default.jpg' ? $post->user->avatar : asset('storage/avatar/user_default.jpg') }}">
                                             </div>
                                             <!-- 名前 -->
                                             <h1 class="text-lg text-gray-700 font-nomal hover:underline m-1 ml-3 cursor-pointer float-left">

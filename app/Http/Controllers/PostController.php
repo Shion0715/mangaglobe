@@ -11,6 +11,8 @@ use App\Models\Like;
 use App\Models\EpImage;
 use App\Models\Tag;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use PhpParser\Node\Expr\New_;
@@ -93,15 +95,27 @@ class PostController extends Controller
 
             $name = date('Ymd_His') . '.' . $type;
 
-            // Save the file to local storage
-            $path = storage_path('app/public/cover_images/' . $name);
-            file_put_contents($path, $data);
+            // Create a Google Cloud Storage client
+            $storage = new StorageClient([
+                'projectId' => env('GOOGLE_CLOUD_PROJECT_ID'),
+                'keyFilePath' => env('GOOGLE_CLOUD_KEY_FILE'),
+            ]);
 
-            // Get the public URL of the saved file
-            $post->cover_image = asset('storage/cover_images/' . $name);
+            // Get the bucket
+            $bucket = $storage->bucket(env('GOOGLE_CLOUD_BUCKET_NAME'));
+
+            // Upload the file to the bucket
+            $bucket->upload(
+                $data,
+                ['name' => 'cover_images/' . $name]
+            );
+
+            // Get the public URL of the uploaded file
+            $post->cover_image = 'https://storage.googleapis.com/' . env('GOOGLE_CLOUD_BUCKET_NAME') . '/cover_images/' . $name;
         } else {
             return back()->with('error', 'Invalid image format');
         }
+
         $post->type = $inputs['type'];
         $post->target_age = $inputs['target_age'];
         $post->recieve_comment = $inputs['recieve_comment'];
@@ -164,7 +178,9 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        $this->authorize('update', $post);
+        if (auth()->user()->cannot('update', $post)) {
+            abort(403);
+        }
 
         return view('post.edit', compact('post'));
     }
@@ -176,7 +192,9 @@ class PostController extends Controller
     //  ラジオボタンと表紙画像の項目を追加して
     public function update(Request $request, Post $post)
     {
-        $this->authorize('update', $post);
+        if ($request->user()->cannot('update', $post)) {
+            abort(403);
+        }
 
         $messages = [
             'title.required' => 'This field is required',
@@ -220,7 +238,7 @@ class PostController extends Controller
             // Create a Google Cloud Storage client
             $storage = new StorageClient([
                 'projectId' => env('GOOGLE_CLOUD_PROJECT_ID'),
-                'keyFilePath' => '/home/xs209264/xs209264.xsrv.jp/public_html/laravel_manga/storage/json/nice-beanbag-420411-68c05e2519d2.json',
+                'keyFilePath' => env('GOOGLE_CLOUD_KEY_FILE'),
             ]);
 
             // Get the bucket
@@ -234,6 +252,8 @@ class PostController extends Controller
 
             // Get the public URL of the uploaded file
             $post->cover_image = 'https://storage.googleapis.com/' . env('GOOGLE_CLOUD_BUCKET_NAME') . '/cover_images/' . $name;
+        } else {
+            return back()->with('error', 'Invalid image format');
         }
         $post->type = $inputs['type'];
         $post->target_age = $inputs['target_age'];
@@ -263,11 +283,13 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($postId)
+    public function destroy(Request $request, $postId)
     {
         $post = Post::findOrFail($postId);
 
-        $this->authorize('delete', $post);
+        if ($request->user()->cannot('delete', $post)) {
+            abort(403);
+        }
 
         $user = auth()->user();
 
@@ -278,7 +300,7 @@ class PostController extends Controller
 
         $storage = new StorageClient([
             'projectId' => env('GOOGLE_CLOUD_PROJECT_ID'),
-            'keyFilePath' => '/home/xs209264/xs209264.xsrv.jp/public_html/laravel_manga/storage/json/nice-beanbag-420411-68c05e2519d2.json',
+            'keyFilePath' => env('GOOGLE_CLOUD_KEY_FILE'),
         ]);
         $bucket = $storage->bucket(env('GOOGLE_CLOUD_BUCKET_NAME'));
         $objectName = 'cover_images/' . basename($post->cover_image);
@@ -286,7 +308,7 @@ class PostController extends Controller
         $object->delete();
 
         foreach ($post->episodes as $episode) {
-            $episode->ep_images()->where('post_id', $post->id)->delete();
+            $episode->ep_images()->where('post_id', $post->id)->delete(); 
         }
 
         $post->episodes()->delete();

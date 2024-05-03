@@ -45,6 +45,10 @@ class CommentController extends Controller
             'post_id' => $request->post_id
         ]);
 
+        if ($request->ajax()) {
+            return response()->json(['message' => 'Thank you for your comment!'], 200);
+        }
+
         return back()->with('message', 'Thank you for your comment!');
     }
 
@@ -54,7 +58,7 @@ class CommentController extends Controller
     public function show(Post $post, Request $request)
     {
         $order = $request->get('order', 'desc');
-        
+
         $comments = $post->comments()->orderBy('created_at', $order)->paginate(15);
 
         return view('comments.show', compact('comments', 'post'));

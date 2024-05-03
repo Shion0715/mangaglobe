@@ -15,7 +15,7 @@ use App\Http\Controllers\RankingContoller;
 use App\Http\Controllers\CashController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\WorksController;
-use App\Http\Controllers\ApiController;
+use App\Http\Controllers\FooterController;
 use App\Models\Episode;
 
 /*
@@ -113,5 +113,17 @@ Route::get('/post/{post}/comment', [CommentController::class, 'show'])->name('co
 // Contact
 Route::get('contact/create', [ContactController::class, 'create'])->name('contact.create');
 Route::post('contact/store', [ContactController::class, 'store'])->name('contact.store');
+
+// footer
+Route::get('report', [FooterController::class, 'report_create'])->name('report_create');
+Route::post('report/issue', [FooterController::class, 'report_store'])->name('report.store');
+Route::get('terms', [FooterController::class, 'terms'])->name('terms');
+Route::get('privacy', [FooterController::class, 'privacy'])->name('privacy');
+Route::get('copyright', [FooterController::class, 'copyright'])->name('copyright');
+Route::get('cookie', [FooterController::class, 'cookie'])->name('cookie');
+Route::get('content', [FooterController::class, 'content'])->name('content');
+Route::get('community', [FooterController::class, 'community'])->name('community');
+Route::get('advertising', [FooterController::class, 'advertising'])->name('advertising');
+
 
 require __DIR__ . '/auth.php';

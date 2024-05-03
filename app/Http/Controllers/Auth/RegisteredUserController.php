@@ -71,10 +71,10 @@ class RegisteredUserController extends Controller
             // Google Cloud Storageに画像をアップロード
             $storage = new StorageClient([
                 'projectId' => env('GOOGLE_CLOUD_PROJECT_ID'),
-                'keyFilePath' => '/home/xs209264/xs209264.xsrv.jp/public_html/laravel_manga/storage/json/nice-beanbag-420411-68c05e2519d2.json',
+                'keyFilePath' => env('GOOGLE_CLOUD_KEY_FILE'),
             ]);
 
-            $bucket = $storage->bucket('laravel-project');
+            $bucket = $storage->bucket('mangaglobe');
             $bucket->upload(
                 $data,
                 [

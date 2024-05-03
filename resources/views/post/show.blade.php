@@ -31,7 +31,7 @@
                         </p>
                         <div class="rounded-full w-8 h-8 sm:w-10 h-10">
                             {{-- アバター表示 --}}
-                            <img src="{{$post->user->avatar ?? 'user_default.jpg'}}">
+                            <img src="{{ $post->user->avatar != 'user_default.jpg' ? $post->user->avatar : asset('storage/avatar/user_default.jpg') }}">
                         </div>
                         <!-- 名前 -->
                         <p class="mt-1 ml-3 break-words">
@@ -57,12 +57,12 @@
 
         <div class="container mx-auto">
             <div class="my-5">
-            <h2 class="text-2xl font-bold">Chapter <span class="text-sm">(Total Chapters: {{ $totalEpisodes }})</span></h2>
+                <h2 class="text-2xl font-bold">Chapter <span class="text-sm">(Total Chapters: {{ $totalEpisodes }})</span></h2>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                 @forelse ($episodes as $index => $episode)
-                <div class="flex sm:flex-col episode-container"> 
+                <div class="flex sm:flex-col episode-container">
                     <div class="flex">
                         <!-- カバー -->
                         <a href="{{ route('episode.show', ['post' => $post->id, 'number' => $episode->number ]) }}">
@@ -103,7 +103,7 @@
                     <div class="flex items-center">
                         <div class="flex-shrink-0">
                             <!-- Replace with user avatar -->
-                            <img class="h-10 w-10" src="{{ $user->avatar != 'user_default.jpg' ? $user->avatar : asset('storage/avatar/user_default.jpg') }}"  alt="{{ $comment->user->name }}">
+                            <img class="h-10 w-10" src="{{ $user->avatar != 'user_default.jpg' ? $user->avatar : asset('storage/avatar/user_default.jpg') }}" alt="{{ $comment->user->name }}">
                         </div>
                         <div class="ml-3">
                             <p class="text-sm font-medium text-gray-900">
@@ -130,6 +130,11 @@
                 @auth
                 <div class="mt-6">
                     <h2 class="text-2xl font-bold">Leave a Comment</h2>
+                    @if (session('message'))
+                    <div class="alert alert-success animate__animated animate__bounce">
+                        {{ session('message') }}
+                    </div>
+                    @endif
                     @if ($post->recieve_comment == 'yes')
                     <form method="POST" action="{{ route('comment.store') }}">
                         @csrf
@@ -153,6 +158,30 @@
                     <p>You need to <a href="{{ route('login') }}" class="text-indigo-600 hover:text-indigo-500">log in</a> to post comments.</p>
                 </div>
                 @endauth
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+                <script>
+                    $(document).ready(function() {
+                        $("form").on("submit", function(event) {
+                            event.preventDefault();
+
+                            var formData = $(this).serialize();
+                            var form = this;
+                            form.reset(); // フォームのリセット
+
+                            $.ajax({
+                                url: "{{ route('comment.store') }}",
+                                type: "POST",
+                                data: formData,
+                                success: function(response) {
+                                    alert(response.message);
+                                },
+                                error: function(jqXHR, textStatus, errorThrown) {
+                                    console.log(textStatus, errorThrown);
+                                }
+                            });
+                        });
+                    });
+                </script>
             </div>
         </div>
     </div>

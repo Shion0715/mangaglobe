@@ -20,15 +20,20 @@
                     <h3 class="mt-1 ml-2 sm:mt-2 text-lg leading-6 font-medium text-gray-900">
                         {{ $comment->user->name }}
                     </h3>
+                    <h3 class="mt-1 ml-5 sm:mt-2 text-sm leading-6 font-medium text-gray-500">
+                        {{ $comment->id}}
+                    </h3>
                 </div>
                 <p class="mt-1 text-md text-gray-800">
                     {{ $comment->body }}
                 </p>
                 <div class="mt-2 flex text-right">
                     <!-- Report button -->
-                    <button class="text-xs text-blue-500 h-7">
-                        <i class="fas fa-flag"></i> Report
-                    </button>
+                    <a href="{{route('report_create')}}">
+                        <button class="text-xs text-blue-500 h-7">
+                            <i class="fas fa-flag"></i> Report
+                        </button>
+                    </a>
                     <!-- Delete button (visible to the author of the comment or the post) -->
                     @if (Auth::id() == $comment->user_id || Auth::id() == $post->user_id)
                     <form action="{{ route('comment.destroy', $comment) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this comment?');">
