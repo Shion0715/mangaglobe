@@ -10,7 +10,7 @@ environments:
             - 'COMPOSER_MIRROR_PATH_REPOS=1 composer install --no-dev'
             - 'php artisan event:cache'
             - 'composer install --no-dev'
-          # - 'npm ci && npm run build && rm -rf node_modules'
+            - 'npm ci && npm run build && rm -rf node_modules'
         storage: mangaglobe-storage
         deploy:
             - 'php artisan migrate --force'
