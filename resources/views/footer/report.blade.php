@@ -9,7 +9,7 @@
 
             <div class="form-group my-7">
                 <label for="report_type" class="block text-sm font-medium text-gray-700">Type of Report</label>
-                <select class="form-control mt-1 block w-1/6 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" id="report_type" name="report_type" required>
+                <select class="form-control mt-1 block w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" id="report_type" name="report_type" required>
                     <option value="">Please select</option>
                     <option value="manga">Manga</option>
                     <option value="chapter">Manga Chapter</option>
@@ -34,7 +34,7 @@
 
             <div class="form-group my-7">
                 <label for="report_scope" class="block text-sm font-medium text-gray-700">Scope</label>
-                <select class="form-control mt-1 block w-1/6 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" id="report_scope" name="report_scope" required>
+                <select class="form-control mt-1 block w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" id="report_scope" name="report_scope" required>
                     <option value="">Please select</option>
                     <option value="copyright" class="manga chapter">Copyright</option>
                     <option value="abuse" class="manga chapter comment">Abuse</option>

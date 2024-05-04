@@ -69,5 +69,10 @@ class FooterController extends Controller
     {
         return view('footer.advertising');
     }
+
+    public function claim()
+    {
+        return view('footer.claim');
+    }
     
 }

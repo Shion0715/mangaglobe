@@ -1,10 +1,6 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
         <div>
-            <h3 class="text-lg font-semibold mb-4">About</h3>
-            <p class="text-gray-400">Brief description of the manga submission site and its purpose.</p>
-        </div>
-        <div>
             <h3 class="text-lg font-semibold mb-4">Terms</h3>
             <ul class="text-gray-400">
                 <li><a href="{{route('terms')}}" class="hover:text-white">Terms of Service</a></li>
@@ -18,7 +14,6 @@
             <ul class="text-gray-400">
                 <li><a href="{{route('content')}}" class="hover:text-white">Content Guidelines</a></li>
                 <li><a href="{{route('community')}}" class="hover:text-white">Community Rules</a></li>
-                <li><a href="{{route('advertising')}}" class="hover:text-white">Advertising Policy</a></li>
             </ul>
         </div>
         <div class="md:col-span-2 lg:col-span-1">

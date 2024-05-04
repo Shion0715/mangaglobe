@@ -1,41 +1,98 @@
-Privacy Policy
-At MangaGlobe, we respect your privacy and are committed to protecting your personal information. This Privacy Policy outlines how we collect, use, and safeguard the information you provide when using our services.
+<x-app-layout>
+    <div class="bg-gray-100 py-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+                <div class="px-4 py-5 sm:px-6">
+                    <h3 class="text-lg leading-6 font-medium text-gray-900">Privacy Policy</h3>
+                    <p class="mt-1 max-w-full text-sm text-gray-500">At MangaGlobe, we respect your privacy and are committed to protecting your personal information. This Privacy Policy outlines how we collect, use, and safeguard the information you provide when using our services.</p>
+                </div>
+                <div class="border-t border-gray-200 px-3">
+                    <dl class="divide-y divide-gray-200">
+                        <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-500">1. Information We Collect</dt>
+                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                <p>1.1 Personal Information: When you create an account on MangaGlobe, we may collect personal information such as your name, email address, and other contact details you provide.</p>
+                                <p>1.2 Usage Information: We automatically collect certain information about your usage of our services, including your IP address, browser type, device information, and interactions with our website.</p>
+                                <p>1.3 Uploaded Content: Any manga or other content you upload to our platform is collected and stored on our servers.</p>
+                            </dd>
+                        </div>
 
-1 Information We Collect
-1.1 Personal Information: When you create an account on MangaGlobe, we may collect personal information such as your name, email address, and other contact details you provide.
-1.2 Usage Information: We automatically collect certain information about your usage of our services, including your IP address, browser type, device information, and interactions with our website.
-1.3 Uploaded Content: Any manga or other content you upload to our platform is collected and stored on our servers.
+                        <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-500">2. Use of Information</dt>
+                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                <p>2.1 We use the personal information you provide to create and manage your account, provide our services, and communicate with you about updates or promotional offers.</p>
+                                <p>2.2 Usage information is collected to analyze trends, monitor and improve our services, and ensure the security and proper functioning of our platform.</p>
+                                <p>2.3 Uploaded content is used solely for the purpose of providing our manga hosting and sharing services.</p>
+                            </dd>
+                        </div>
 
-2  Use of Information
-2.1 We use the personal information you provide to create and manage your account, provide our services, and communicate with you about updates or promotional offers.
-2.2 Usage information is collected to analyze trends, monitor and improve our services, and ensure the security and proper functioning of our platform.
-2.3 Uploaded content is used solely for the purpose of providing our manga hosting and sharing services.
+                        <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-500">3. Information Sharing and Disclosure</dt>
+                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                <p>3.1 We do not sell or rent your personal information to third parties for marketing purposes.</p>
+                                <p>3.2 We may share your information with trusted service providers who assist us in operating our services, provided they agree to maintain the confidentiality of such information.</p>
+                                <p>3.3 We may disclose your information if required by law, to comply with legal processes, or to protect our rights, property, or safety.</p>
+                            </dd>
+                        </div>
 
-3 Information Sharing and Disclosure
-3.1 We do not sell or rent your personal information to third parties for marketing purposes.
-3.2 We may share your information with trusted service providers who assist us in operating our services, provided they agree to maintain the confidentiality of such information.
-3.3 We may disclose your information if required by law, to comply with legal processes, or to protect our rights, property, or safety.
+                        <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-500">4. Data Security</dt>
+                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                <p>We implement reasonable technical and organizational measures to protect your personal information from unauthorized access, disclosure, alteration, or destruction. However, no method of transmission over the Internet or electronic storage is 100% secure.</p>
+                            </dd>
+                        </div>
 
-4 Data Security
-We implement reasonable technical and organizational measures to protect your personal information from unauthorized access, disclosure, alteration, or destruction. However, no method of transmission over the Internet or electronic storage is 100% secure.
+                        <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-500">5. Cookies and Tracking Technologies</dt>
+                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                <p>We use cookies and similar tracking technologies to enhance your experience on our website and to analyze trends and site usage.</p>
+                            </dd>
+                        </div>
 
-5 Cookies and Tracking Technologies
-We use cookies and similar tracking technologies to enhance your experience on our website and to analyze trends and site usage.
+                        <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-500">6. Third-Party Links and Services</dt>
+                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                <p>Our website may contain links to third-party websites or services that are not governed by this Privacy Policy. We are not responsible for the privacy practices of these third parties.</p>
+                            </dd>
+                        </div>
 
-6 Third-Party Links and Services
-Our website may contain links to third-party websites or services that are not governed by this Privacy Policy. We are not responsible for the privacy practices of these third parties.
+                        <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-500">7. Children's Privacy</dt>
+                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                <p>Our services are not directed toward children under the age of 13. We do not knowingly collect personal information from children.</p>
+                            </dd>
+                        </div>
 
-7 Children's Privacy
-Our services are not directed toward children under the age of 13. We do not knowingly collect personal information from children.
+                        <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-500">8. Data Retention</dt>
+                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                <p>We retain your personal information for as long as necessary to provide our services and comply with legal obligations. We will delete your information upon your request or after a reasonable period of inactivity.</p>
+                            </dd>
+                        </div>
 
-8 Data Retention
-We retain your personal information for as long as necessary to provide our services and comply with legal obligations. We will delete your information upon your request or after a reasonable period of inactivity.
+                        <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-500">9. Your Rights and Choices</dt>
+                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                <p>You have the right to access, update, or delete your personal information by contacting us. You may also opt-out of receiving promotional communications from us.</p>
+                            </dd>
+                        </div>
 
-9 Your Rights and Choices
-You have the right to access, update, or delete your personal information by contacting us. You may also opt-out of receiving promotional communications from us.
+                        <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-500">10. Changes to this Privacy Policy</dt>
+                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                <p>We may update this Privacy Policy from time to time. Any changes will be posted on our website, and the updated policy will be effective as of the "Last Updated" date.</p>
+                            </dd>
+                        </div>
 
-10 Changes to this Privacy Policy
-We may update this Privacy Policy from time to time. Any changes will be posted on our website, and the updated policy will be effective as of the "Last Updated" date.
-
-If you have any questions or concerns about our Privacy Policy, please contact us at [contact information].
-By using MangaGlobe, you consent to the collection, use, and sharing of your information as described in this Privacy Policy.
+                        <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-500">Contact Us</dt>
+                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                <p>If you have any questions or concerns about our Privacy Policy, please <a href="{{ route('contact.create') }}" class="text-blue-500">contact us</a>.</p>
+                            </dd>
+                        </div>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+</x-app-layout>

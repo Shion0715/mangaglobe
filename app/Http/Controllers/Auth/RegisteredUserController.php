@@ -47,7 +47,7 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'profile' => $request->profile,
             'password' => Hash::make($request->password),
-            'notify' => $request->has('notify'), 
+            'notify' => $request->input('notify') ? 1 : 0, 
         ];
 
         // avatarの保存
@@ -93,6 +93,6 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect('/');
+        return redirect()->route('verification.notice');
     }
 }

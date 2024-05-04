@@ -41,15 +41,13 @@ Route::middleware(['auth', 'can:admin'])->group(function () {
     Route::get('profile/index', [ProfileController::class, 'index'])->name('profile.index');
 });
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['verified'])->group(function () {
     // My page
     Route::get('mypage/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('mypage/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::get('mypage/account', [ProfileController::class, 'show'])->name('profile.show');
     Route::delete('mypage/account', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('mypage/cash', [CashController::class, 'index'])->name('cash.index');
-
-    Route::get('post/mypost', [PostController::class, 'mypost'])->name('post.mypost');
     // bookshelf
     Route::get('bookshelf/top', [BookshelfController::class, 'top'])->name('bookshelf.top');
     Route::get('bookshelf/favorite', [BookshelfController::class, 'favorite'])->name('bookshelf.favorite');
@@ -74,9 +72,6 @@ Route::middleware(['auth'])->group(function () {
     // commnent
     Route::post('post/comment/store', [CommentController::class, 'store'])->name('comment.store');
     Route::delete('post/comment/{comment}', [CommentController::class, 'destroy'])->name('comment.destroy');
-});
-
-Route::middleware('auth')->group(function () {
 });
 
 Route::get('/', [PostController::class, 'index'])->name('post.index');
@@ -123,7 +118,8 @@ Route::get('copyright', [FooterController::class, 'copyright'])->name('copyright
 Route::get('cookie', [FooterController::class, 'cookie'])->name('cookie');
 Route::get('content', [FooterController::class, 'content'])->name('content');
 Route::get('community', [FooterController::class, 'community'])->name('community');
-Route::get('advertising', [FooterController::class, 'advertising'])->name('advertising');
+Route::get('claim', [FooterController::class, 'claim'])->name('claim');
+// Route::get('advertising', [FooterController::class, 'advertising'])->name('advertising');
 
 
 require __DIR__ . '/auth.php';
