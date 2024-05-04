@@ -1,5 +1,3 @@
 *
 !public/
 !.gitignore
-public/storage/*
-!public/storage/user_default.jpg
