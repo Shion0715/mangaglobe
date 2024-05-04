@@ -98,7 +98,7 @@ class PostController extends Controller
             // Create a Google Cloud Storage client
             $storage = new StorageClient([
                 'projectId' => env('GOOGLE_CLOUD_PROJECT_ID'),
-                'keyFilePath' => env('GOOGLE_CLOUD_KEY_FILE'),
+                'keyFilePath' => '/var/www/mangaglobe/storage/json/tidal-geode-422010-51c8320b286b.json',
             ]);
 
             // Get the bucket
