@@ -110,7 +110,7 @@
                                 <p class="text-gray-600 text-sm">{{ $comment->created_at->diffForHumans() }}</p>
                             </div>
                         </div>
-                        <p class="text-gray-800 mt-2">{{ $comment->body }}</p>
+                        <p class="text-gray-800 mt-2 overflow-ellipsis overflow-hidden">{{ $comment->body }}</p>
                     </div>
                     @empty
                     <div class="p-4 text-gray-600">No recent comments.</div>

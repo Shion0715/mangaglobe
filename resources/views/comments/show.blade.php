@@ -14,32 +14,24 @@
         @forelse ($comments as $comment)
         <div class="mt-4 bg-white shadow overflow-hidden sm:rounded-lg">
             <div class="px-4 py-5 sm:px-6">
-                <div class="flex">
+                <div class="flex items-center">
                     <!-- Replace with user avatar -->
                     <img class="h-7 w-7 sm:h-9 sm:w-9" src="{{ $comment->user->avatar != 'user_default.jpg' ? $comment->user->avatar : asset('storage/avatar/user_default.jpg') }}">
-                    <h3 class="mt-1 ml-2 sm:mt-2 text-lg leading-6 font-medium text-gray-900">
-                        {{ $comment->user->name }}
-                    </h3>
-                    <h3 class="mt-1 ml-5 sm:mt-2 text-sm leading-6 font-medium text-gray-500">
-                        {{ $comment->id}}
-                    </h3>
+                    <h3 class="text-md sm:text-base ml-2 sm:ml-3 leading-6 font-medium text-gray-900">{{ $comment->user->name }}</h3>
+                    <p class="text-xs sm:text-sm ml-2 sm:ml-3 mt-1 leading-6 font-medium text-gray-500">{{ $comment->id }}</p>
                 </div>
-                <p class="mt-1 text-md text-gray-800">
-                    {{ $comment->body }}
-                </p>
-                <div class="mt-2 flex text-right">
+                <p class="mt-2 text-sm sm:text-base text-gray-800 break-words">{{ $comment->body }}</p>
+                <div class="mt-2 flex justify-end">
                     <!-- Report button -->
-                    <a href="{{route('report_create')}}">
-                        <button class="text-xs text-blue-500 h-7">
-                            <i class="fas fa-flag"></i> Report
-                        </button>
+                    <a href="{{ route('report_create') }}" class="text-xs mt-1 sm:text-sm text-blue-500 hover:text-blue-700">
+                        <i class="fas fa-flag"></i> Report
                     </a>
                     <!-- Delete button (visible to the author of the comment or the post) -->
                     @if (Auth::id() == $comment->user_id || Auth::id() == $post->user_id)
                     <form action="{{ route('comment.destroy', $comment) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this comment?');">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="text-xs ml-2 text-red-500 h-7">
+                        <button type="submit" class="text-xs sm:text-sm ml-2 text-red-500 hover:text-red-700">
                             <i class="fas fa-trash"></i> Delete
                         </button>
                     </form>

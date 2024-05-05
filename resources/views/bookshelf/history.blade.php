@@ -41,10 +41,10 @@
                                 </a>
                                 <!-- タイトル -->
                                 <h1 class="text-lg text-gray-700 font-semibold hover:underline cursor-pointer float-left ranking-post-title">
-                                    <a href="{{route('post.show', $post)}}">{{Str::limit ($post->title,20, ' …' )}}</a>
+                                    <a href="{{route('post.show', $post)}}">{{$post->title}}</a>
                                 </h1>
                                 <!-- 名前 -->
-                                <h1 class="text-lg text-gray-700 font-nomal hover:underline cursor-pointer float-left ranking-post-name">
+                                <h1 class="text-lg text-gray-700 font-nomal hover:underline cursor-pointer float-left ranking-post-name user-name">
                                     <a href="{{route('auther.index',  ['user' => $post->user->id])}}">{{ $post->user->name }}</a>
                                 </h1>
                             </div>

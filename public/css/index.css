@@ -50,29 +50,25 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
-    line-height: 1.8em;
-    height: 2.0em;
-    /* 2行の高さ */
-    word-wrap: break-word;
-    /* 単語が要素の幅を超える場合に単語を改行 */
+    line-height: 0.5em;
+    height: 3.0em; /* 2行の高さ */
+    word-wrap: break-word; /* 単語が要素の幅を超える場合に単語を改行 */
 }
 
 @media (max-width: 640px) {
     .index-post-title {
-        max-width: 8em;
-        /* 9chを適切なem値に変更 */
+        max-width: 8em; /* 9chを適切なem値に変更 */
     }
 }
 
 @media (min-width: 641px) {
     .index-post-title {
-        max-width: 11em;
-        /* 18chを適切なem値に変更 */
+        max-width: 11em; /* 18chを適切なem値に変更 */
     }
 }
 
-.user-name {
-    max-width: 110px;
+.index-user-name {
+    max-width: 105px;
     /* 適切な幅に調整 */
     overflow: hidden;
     text-overflow: ellipsis;
@@ -81,9 +77,8 @@
 
 @media (min-width: 640px) {
 
-    /* 768px以上のデバイス（PC版）で適用 */
-    .user-name {
-        max-width: 158px;
+    .index-user-name {
+        max-width: 150px;
         /* PC版の幅に調整 */
     }
 }

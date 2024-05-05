@@ -41,7 +41,7 @@
                                 </a>
                                 <!-- タイトル -->
                                 <h1 class="text-lg text-gray-700 font-semibold hover:underline cursor-pointer float-left ranking-post-title">
-                                    <a href="{{route('post.show', $like->post)}}">{{Str::limit ($like->post->title,20, ' …' )}}</a>
+                                    <a href="{{route('post.show', $like->post)}}">{{$like->post->title}}</a>
                                 </h1>
                                 <!-- 名前 -->
                                 <h1 class="text-lg text-gray-700 font-nomal hover:underline cursor-pointer float-left ranking-post-name">

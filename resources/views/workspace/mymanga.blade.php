@@ -45,48 +45,37 @@
                                 </div>
                                 <div class="flex-grow flex flex-col"> <!-- Add items-start here -->
 
-                                    <!-- スマホの場合 -->
+                                
                                     <div class="flex justify-between items-start"> <!-- Add this wrapper -->
                                         <!-- タイトル -->
                                         <a href="{{route('post.show', $post)}}">
-                                            <p class="text-lg sm:text-3xl text-gray-700 font-semibold cursor-pointer sm:mb-3" style="word-break: break-all;">
+                                            <p class="text-lg sm:text-3xl text-gray-700 font-semibold cursor-pointer sm:mb-3 break-words" style="word-break: break-all;">
                                                 {{ $post->title }}
                                             </p>
                                         </a>
-                                        <div class="flex sm:hidden">
-                                            <div class="dropdown inline-block relative">
-                                                <button class="bg-gray-300 text-gray-700 font-semibold py-2 px-4 rounded inline-flex items-center">
-                                                    <!-- <span class="mr-1">Menu</span> -->
-                                                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                        <path d="M10 12a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0-6a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 12a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" />
-                                                    </svg>
-                                                </button>
-                                                <ul class="dropdown-menu absolute hidden right-0 text-gray-700 pt-1">
-                                                    <li class=""><a class="rounded-t bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap" href="{{route('post.edit', $post)}}">Edit Manga</a></li>
-                                                    <li class=""><a class="bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap" href="{{route('episode.index_edit', $post)}}">Edit Chapter</a></li>
-                                                    <li class=""><a class="bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap" href="{{route('episode.create', $post)}}">Create</a></li>
-                                                    @can('delete', $post)
-                                                    <li class=""><a class="bg-red-200 hover:bg-red-400 py-2 px-4 block whitespace-no-wrap" href="{{route('post.destroy', $post->id)}}" onClick="return confirm('Are you sure you want to delete？');">Delete</a></li>
-                                                    @endcan
-                                                </ul>
-                                                <script>
-                                                    $(document).ready(function() {
-                                                        $('.dropdown button').click(function(event) {
-                                                            event.stopPropagation();
-                                                            $(this).next('.dropdown-menu').toggle();
-                                                        });
-
-                                                        $(document).click(function() {
-                                                            $('.dropdown-menu').hide();
-                                                        });
-                                                    });
-                                                </script>
+                                        <div class="relative">
+                                            <button class="bg-gray-300 text-gray-700 font-semibold py-2 px-4 rounded inline-flex items-center dropdown-toggle" data-dropdown-id="dropdown-{{ $post->id }}">
+                                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                                    <path d="M10 12a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0-6a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 12a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" />
+                                                </svg>
+                                            </button>
+                                            <div class="dropdown-menu absolute hidden bg-white shadow-lg rounded mt-2 py-2 w-48 right-0 z-10" id="dropdown-{{ $post->id }}">
+                                                <a class="block px-4 py-2 text-gray-800 hover:bg-gray-200" href="{{ route('post.edit', $post) }}"><i class="fas fa-edit"></i> Edit Manga</a>
+                                                <a class="block px-4 py-2 text-gray-800 hover:bg-gray-200" href="{{ route('episode.index_edit', $post) }}"><i class="fas fa-list"></i> Edit Chapter</a>
+                                                <a class="block px-4 py-2 text-gray-800 hover:bg-gray-200" href="{{ route('episode.create', $post) }}"><i class="fas fa-plus"></i> Create</a>
+                                                @can('delete', $post)
+                                                <form id="deleteForm-{{ $post->id }}" method="post" action="{{ route('post.destroy', $post->id) }}">
+                                                    @csrf
+                                                    @method('delete')
+                                                </form>
+                                                <a href="#" class="block px-4 py-2 text-red-600 hover:bg-red-200" onclick="event.preventDefault(); if(confirm('Are you sure you want to delete?')) document.getElementById('deleteForm-{{ $post->id }}').submit();"><i class="fas fa-trash"></i> Delete</a>
+                                                @endcan
                                             </div>
                                         </div>
                                     </div> <!-- End of the wrapper -->
 
                                     <!-- Body -->
-                                    <p class="text-sm sm:text-lg text-gray-800 mb-2 sm:mb-3" style="overflow-y: scroll; max-height: 100px; @media (min-width: 640px) {max-height: 200px;}">
+                                    <p class="text-sm sm:text-lg text-gray-800 mb-2 sm:mb-3 break-words" style="overflow-y: scroll; max-height: 100px; @media (min-width: 640px) {max-height: 200px;}">
                                         {{ $post->body }}
                                     </p>
 
@@ -105,22 +94,8 @@
                                         <span class="ml-1">{{ $post->views }}</span>
                                     </div>
 
-                                    <!-- PCの場合: -->
-                                    <div class="hidden sm:flex">
-                                        <a href="{{route('post.edit', $post)}}" class="float-right"><i class="fas fa-book"></i> Edit Manga</a>
-
-                                        <a href="{{route('episode.index_edit', $post)}}" class="float-right ml-4"><i class="fas fa-file-alt"></i> Edit Chapter</a>
-
-                                        <a href="{{route('episode.create', $post)}}" class="float-right ml-4"><i class="fas fa-plus-circle"></i> Post New Chapter</a>
-
-                                        @can('delete', $post)
-                                        <form id="deleteForm-{{ $post->id }}" method="post" action="{{route('post.destroy', $post->id)}}">
-                                            @csrf
-                                            @method('delete')
-                                        </form>
-                                        <a href="#" class="bg-white-700 float-right ml-4 text-red-500" onClick="event.preventDefault(); if(confirm('Are you sure you want to delete？')) document.getElementById('deleteForm-{{ $post->id }}').submit();"><i class="fas fa-trash-alt"></i> Delete</a>
-                                        @endcan
-                                    </div>
+                            
+                                    
                                 </div>
                             </div>
                         </div>
@@ -138,3 +113,28 @@
         </div>
     </div>
 </x-app-layout>
+
+<script>
+    const dropdownButtons = document.querySelectorAll('.dropdown-toggle');
+
+    dropdownButtons.forEach(button => {
+        const dropdownId = button.getAttribute('data-dropdown-id');
+        const dropdownMenu = document.getElementById(dropdownId);
+
+        button.addEventListener('click', () => {
+            dropdownMenu.classList.toggle('hidden');
+        });
+
+        document.addEventListener('click', (event) => {
+            if (!event.target.closest(`.dropdown-toggle[data-dropdown-id="${dropdownId}"]`) && !event.target.closest(`#${dropdownId}`)) {
+                dropdownMenu.classList.add('hidden');
+            }
+        });
+    });
+</script>
+
+<style>
+    .break-words {
+        word-break: break-word;
+    }
+</style>

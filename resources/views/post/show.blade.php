@@ -97,7 +97,6 @@
         <div class="container mx-auto">
             <div class="mt-8">
                 <h2 class="text-2xl font-bold">Comments</h2>
-
                 @forelse ($comments as $comment)
                 <div class="mt-4 border-t border-gray-200 pt-4">
                     <div class="flex items-center">
@@ -112,7 +111,7 @@
                         </div>
                     </div>
                     <div class="mt-2">
-                        <p class="text-sm text-gray-500">
+                        <p class="text-sm text-gray-500 break-words">
                             {{ $comment->body }}
                         </p>
                     </div>
@@ -120,12 +119,19 @@
                 @empty
                 <p class="mt-4">No comments yet.</p>
                 @endforelse
-
                 <div class="mt-4 flex justify-end">
                     <a href="{{ route('comment.show', $post) }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                         View All Comments
                     </a>
                 </div>
+
+                <style>
+                    @media (max-width: 640px) {
+                        .break-words {
+                            word-break: break-word;
+                        }
+                    }
+                </style>
 
                 @auth
                 <div class="mt-6">

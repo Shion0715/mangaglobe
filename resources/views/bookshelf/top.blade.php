@@ -44,20 +44,20 @@
                                     <!-- 画像のスライド -->
                                     @foreach($posts as $post)
                                     <div class="flex flex-col mt-1 m-3 mx-auto">
-                                        <a href="{{route('post.show', $post)}}">
-                                            <img src="{{ $post->cover_image }}" class="m-3">
+                                        <a href="{{route('post.show', $post)}}" class="mr-5">
+                                            <img src="{{ $post->cover_image }}">
                                         </a>
                                         <!-- タイトル -->
-                                        <h1 class="text-lg text-gray-700 font-semibold hover:underline ml-3 cursor-pointer float-left">
-                                            <a href="{{route('post.show', $post)}}">{{Str::limit ($post->title,20, ' …' )}}</a>
+                                        <h1 class="text-lg text-gray-700 font-semibold hover:underline cursor-pointer float-left index-post-title">
+                                            <a href="{{route('post.show', $post)}}">{{$post->title}}</a>
                                         </h1>
                                         <div class="flex mt-5">
-                                            <div class="rounded-full w-10 h-10">
+                                            <div class="w-8 h-8">
                                                 {{-- アバター表示 --}}
                                                 <img src="{{ $post->user->avatar != 'user_default.jpg' ? $post->user->avatar : asset('storage/avatar/user_default.jpg') }}">
                                             </div>
                                             <!-- 名前 -->
-                                            <h1 class="text-lg text-gray-700 font-nomal hover:underline m-1 ml-3 cursor-pointer float-left">
+                                            <h1 class="text-lg text-gray-700 font-nomal hover:underline m-1 cursor-pointer float-left index-user-name">
                                                 <a href="{{route('auther.index',  ['user' => $post->user->id])}}">{{ $post->user->name }}</a>
                                             </h1>
                                         </div>
@@ -84,21 +84,21 @@
                                     <!-- 画像のスライド -->
                                     @foreach($likes as $like)
                                     <div class="flex flex-col mt-1 m-3 mx-auto">
-                                        <a href="{{route('post.show', $like->post)}}">
-                                            <img src="{{ $like->post->cover_image }}" class="m-3">
+                                        <a href="{{route('post.show', $like->post)}}" class="mr-5">
+                                            <img src="{{ $like->post->cover_image }}">
                                         </a>
                                         <!-- タイトル -->
-                                        <h1 class="text-lg text-gray-700 font-semibold hover:underline ml-3 cursor-pointer float-left">
-                                            <a href="{{route('post.show', $like->post)}}">{{Str::limit ($like->post->title,20, ' …' )}}</a>
+                                        <h1 class="text-lg text-gray-700 font-semibold hover:underline cursor-pointer float-left index-post-title">
+                                            <a href="{{route('post.show', $like->post)}}">{{$like->post->title}}</a>
                                         </h1>
                                         <div class="flex mt-5">
-                                            <div class="rounded-full w-10 h-10">
+                                            <div class=" w-8 h-18">
                                                 {{-- アバター表示 --}}
                                                 <img src="{{ $post->user->avatar != 'user_default.jpg' ? $post->user->avatar : asset('storage/avatar/user_default.jpg') }}">
                                             </div>
                                             <!-- 名前 -->
-                                            <h1 class="text-lg text-gray-700 font-nomal hover:underline m-1 ml-3 cursor-pointer float-left">
-                                                <a href="{{route('auther.index',  ['user' => $like->post->user->id])}}">{{ $like->post->user->name }}</a>
+                                            <h1 class="text-lg text-gray-700 font-nomal hover:underline m-1 ml-1 sm:ml-2 cursor-pointer float-left index-user-name">
+                                                <a href="{{route('auther.index',  ['user' => $like->post->user->id])}}">{{ \Illuminate\Support\Str::limit($like->post->user->name, 9) }}</a>
                                             </h1>
                                         </div>
                                     </div>

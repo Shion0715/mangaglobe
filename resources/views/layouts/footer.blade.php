@@ -21,7 +21,7 @@
             <ul class="text-gray-400">
                 <!-- <li><a href="#" class="hover:text-white">FAQ</a></li> -->
                 <li><a href="{{route('contact.create')}}" class="hover:text-white">Contact Us</a></li>
-                <li><a href="{{route('report_create')}}" class="hover:text-white">Report Abuse</a></li>
+                <li><a href="{{route('report_create')}}" class="hover:text-white">Report an Issue</a></li>
             </ul>
         </div>
         

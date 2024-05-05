@@ -36,7 +36,7 @@
                                                     <img id="avatar_preview" src="{{ $post->user->avatar != 'user_default.jpg' ? $post->user->avatar : asset('storage/avatar/user_default.jpg') }}" class="object-contain">
                                                 </div>
                                                 <!-- 名前 -->
-                                                <h1 class="text-lg text-gray-700 font-normal hover:underline ml-2 sm:mt-2 user-name">
+                                                <h1 class="text-lg text-gray-700 font-normal hover:underline ml-2 sm:mt-2 index-user-name">
                                                     <a href="{{route('auther.index',  ['user' => $post->user->id])}}">{{ $post->user->name }}</a>
                                                 </h1>
                                             </div>
@@ -81,7 +81,7 @@
                                                     <img id="avatar_preview" src="{{ $post->user->avatar != 'user_default.jpg' ? $post->user->avatar : asset('storage/avatar/user_default.jpg') }}" class="object-contain">
                                                 </div>
                                                 <!-- 名前 -->
-                                                <h1 class="text-lg text-gray-700 font-normal hover:underline ml-2 sm:mt-2 user-name">
+                                                <h1 class="text-lg text-gray-700 font-normal hover:underline ml-2 sm:mt-2 index-user-name">
                                                     <a href="{{route('auther.index',  ['user' => $post->user->id])}}">{{ $post->user->name }}</a>
                                                 </h1>
                                             </div>
