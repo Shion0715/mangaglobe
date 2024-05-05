@@ -12,8 +12,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
-use Google\Cloud\Storage\StorageClient;
 use Illuminate\Support\Str;
+use Aws\S3\S3Client;
 
 class RegisteredUserController extends Controller
 {
@@ -38,16 +38,14 @@ class RegisteredUserController extends Controller
             'avatar' => ['image', 'max:1024'],
             'profile' => ['nullable', 'string', 'max:200'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'notify' => ['nullable'], 
+            'notify' => ['nullable'],
         ]);
-
-        // userテーブルのデータ
         $attr = [
             'name' => $request->name,
             'email' => $request->email,
-            'profile' => $request->profile,
             'password' => Hash::make($request->password),
-            'notify' => $request->input('notify') ? 1 : 0, 
+            'profile' => $request->profile,
+            'notify' => $request->has('notify') ? 1 : 0,
         ];
 
         // avatarの保存
@@ -68,23 +66,25 @@ class RegisteredUserController extends Controller
             // ユーザーIDを使用して画像を一意に命名
             $name = 'avatar/' . Str::random(10) . '_' . date('Ymd_His') . '.' . $type;
 
-            // Google Cloud Storageに画像をアップロード
-            $storage = new StorageClient([
-                'projectId' => env('GOOGLE_CLOUD_PROJECT_ID'),
-                'keyFilePath' => env('GOOGLE_CLOUD_KEY_FILE'),
+            // Amazon S3に画像をアップロード
+            $s3 = new S3Client([
+                'version' => 'latest',
+                'region'  => env('AWS_DEFAULT_REGION'),
+                'credentials' => [
+                    'key'    => env('AWS_ACCESS_KEY_ID'),
+                    'secret' => env('AWS_SECRET_ACCESS_KEY'),
+                ],
             ]);
 
-            $bucket = $storage->bucket('mangaglobe');
-            $bucket->upload(
-                $data,
-                [
-                    'name' => $name,
-                    'uniformBucketLevelAccess' => true
-                ]
-            );
+            $s3->putObject([
+                'Bucket' => env('AWS_BUCKET'),
+                'Key'    => $name,
+                'Body'   => $data,
+                'ContentType' => 'image/' . $type // コンテンツタイプの設定
+            ]);
 
             // 画像の公開URLを取得
-            $attr['avatar'] = "https://storage.googleapis.com/laravel-project/" . $name;
+            $attr['avatar'] = $s3->getObjectUrl(env('AWS_BUCKET'), $name);
         }
 
         $user = User::create($attr);

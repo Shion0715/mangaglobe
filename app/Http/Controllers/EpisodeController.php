@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Cookie;
 use App\Models\EpImage;
 use Illuminate\Http\Request;
 use Google\Cloud\Storage\StorageClient;
+use Aws\S3\S3Client;
 
 class EpisodeController extends Controller
 {
@@ -43,12 +44,14 @@ class EpisodeController extends Controller
         $episode->number = $request->input('episode_number');
 
         // カバー画像の保存
-        $storage = new StorageClient([
-            'projectId' => env('GOOGLE_CLOUD_PROJECT_ID'),
-            'keyFilePath' => env('GOOGLE_CLOUD_KEY_FILE'),
+        $s3 = new S3Client([
+            'version' => 'latest',
+            'region'  => env('AWS_DEFAULT_REGION'),
+            'credentials' => [
+                'key'    => env('AWS_ACCESS_KEY_ID'),
+                'secret' => env('AWS_SECRET_ACCESS_KEY'),
+            ],
         ]);
-
-        $bucket = $storage->bucket('mangaglobe');
 
         if (preg_match('/^data:image\/(\w+);base64,/', request('cropped_ep_cover_image'), $type)) {
             $data = substr(request('cropped_ep_cover_image'), strpos(request('cropped_ep_cover_image'), ',') + 1);
@@ -66,41 +69,50 @@ class EpisodeController extends Controller
 
             $name = date('Ymd_His') . '.' . $type;
 
-            // Google Cloud Storageに画像をアップロード
-            $bucket->upload(
-                $data,
-                [
-                    'name' => 'ep_cover_images/' . $name,
-                    'uniformBucketLevelAccess' => true
-                ]
-            );
+            // Amazon S3に画像をアップロード
+            $result = $s3->putObject([
+                'Bucket' => env('AWS_BUCKET'),
+                'Key'    => 'ep_cover_images/' . $name,
+                'Body'   => $data,
+            ]);
 
             // Get the public URL of the uploaded file
-            $episode->cover_image = 'https://storage.googleapis.com/' . env('GOOGLE_CLOUD_BUCKET_NAME') . '/ep_cover_images/' . $name;
+            $episode->cover_image = $result['ObjectURL'];
+        } else {
+            return back()->with('error', 'Invalid image format');
         }
         $episode->save();
 
         // Episode Imageの保存
         $epImages = [];
-        $episodeNumber = $episode->number;
+        $episodeNumber = $request->input('episode_number');
 
         // 画像の順序情報を取得
         $imageOrder = explode(',', $request->input('image_order'));
+
+        // Create an Amazon S3 client
+        $s3 = new S3Client([
+            'version' => 'latest',
+            'region'  => env('AWS_DEFAULT_REGION'),
+            'credentials' => [
+                'key'    => env('AWS_ACCESS_KEY_ID'),
+                'secret' => env('AWS_SECRET_ACCESS_KEY'),
+            ],
+        ]);
 
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $key => $image) {
                 $imageName = date('Ymd_His') . '_' . $image->getClientOriginalName();
 
-                // Google Cloud Storageに画像をアップロード
-                $bucket->upload(
-                    file_get_contents($image->getRealPath()),
-                    [
-                        'name' => 'ep_images/' . $imageName,
-                        'uniformBucketLevelAccess' => true
-                    ]
-                );
+                // Amazon S3に画像をアップロード
+                $result = $s3->putObject([
+                    'Bucket' => env('AWS_BUCKET'),
+                    'Key'    => 'ep_images/' . $imageName,
+                    'Body'   => file_get_contents($image->getRealPath()),
+                    'ContentType' => $image->getMimeType()
+                ]);
 
-                $imageURL = 'https://storage.googleapis.com/' . env('GOOGLE_CLOUD_BUCKET_NAME') . '/ep_images/' . $imageName;
+                $imageURL = $result['ObjectURL'];
 
                 $epImages[] = [
                     'image' => $imageURL,
@@ -140,7 +152,7 @@ class EpisodeController extends Controller
         }
 
         // EpImages テーブルから episode_number が一致するレコードを取得
-        $ep_images = EpImage::where('episode_number', $number)->get();
+        $ep_images = EpImage::where('episode_id', $episode->id)->get();
 
         return response()->view('post.episode', compact('ep_images', 'episode', 'post', 'nextEpisodeExists'))->cookie($cookie);
     }
@@ -213,12 +225,14 @@ class EpisodeController extends Controller
         $episode->progress = $request->input('progress');
 
         // カバー画像の保存
-        $storage = new StorageClient([
-            'projectId' => env('GOOGLE_CLOUD_PROJECT_ID'),
-            'keyFilePath' => env('GOOGLE_CLOUD_KEY_FILE'),
+        $s3 = new S3Client([
+            'version' => 'latest',
+            'region'  => env('AWS_DEFAULT_REGION'),
+            'credentials' => [
+                'key'    => env('AWS_ACCESS_KEY_ID'),
+                'secret' => env('AWS_SECRET_ACCESS_KEY'),
+            ],
         ]);
-
-        $bucket = $storage->bucket('mangaglobe');
 
         if (preg_match('/^data:image\/(\w+);base64,/', request('cropped_ep_cover_image'), $type)) {
             $data = substr(request('cropped_ep_cover_image'), strpos(request('cropped_ep_cover_image'), ',') + 1);
@@ -236,32 +250,50 @@ class EpisodeController extends Controller
 
             $name = date('Ymd_His') . '.' . $type;
 
-            // Google Cloud Storageに画像をアップロード
-            $bucket->upload(
-                $data,
-                [
-                    'name' => 'ep_cover_images/' . $name,
-                    'uniformBucketLevelAccess' => true
-                ]
-            );
+            // Amazon S3に画像をアップロード
+            $result = $s3->putObject([
+                'Bucket' => env('AWS_BUCKET'),
+                'Key'    => 'ep_cover_images/' . $name,
+                'Body'   => $data,
+            ]);
 
             // Get the public URL of the uploaded file
-            $episode->cover_image = 'https://storage.googleapis.com/' . env('GOOGLE_CLOUD_BUCKET_NAME') . '/ep_cover_images/' . $name;
+            $episode->cover_image = $result['ObjectURL'];
+        } else {
+            return back()->with('error', 'Invalid image format');
         }
 
         $episode->number = $request->input('episode_number');
 
         $episode->save();
 
-        $storage = new StorageClient([
-            'projectId' => env('GOOGLE_CLOUD_PROJECT_ID'),
-            'keyFilePath' => env('GOOGLE_CLOUD_KEY_FILE'),
+        // エピソードの画像を更新
+        // Create an Amazon S3 client
+        $s3 = new S3Client([
+            'version' => 'latest',
+            'region'  => env('AWS_DEFAULT_REGION'),
+            'credentials' => [
+                'key'    => env('AWS_ACCESS_KEY_ID'),
+                'secret' => env('AWS_SECRET_ACCESS_KEY'),
+            ],
         ]);
+        // 既存の画像を削除
+        $epImages = $episode->ep_images;
+        foreach ($epImages as $epImage) {
+            // Amazon S3から画像を削除
+            $s3->deleteObject([
+                'Bucket' => env('AWS_BUCKET'),
+                'Key'    => $epImage->image
+            ]);
 
-        $bucket = $storage->bucket('mangaglobe');
+            // データベースからEpImageレコードを削除
+            $epImage->delete();
+        }
 
-        $newEpImages = []; // 新しい配列を作成
-        $episodeNumber = $episode->number;
+
+        // 新しい画像のアップロードと保存
+        $epImages = [];
+        $episodeNumber = $request->input('episode_number');
 
         // 画像の順序情報を取得
         $imageOrder = explode(',', $request->input('image_order'));
@@ -270,22 +302,17 @@ class EpisodeController extends Controller
             foreach ($request->file('images') as $key => $image) {
                 $imageName = date('Ymd_His') . '_' . $image->getClientOriginalName();
 
-                // Google Cloud Storageに画像をアップロード
-                try {
-                    $bucket->upload(
-                        file_get_contents($image->getRealPath()),
-                        [
-                            'name' => 'ep_images/' . $imageName,
-                            'uniformBucketLevelAccess' => true
-                        ]
-                    );
-                } catch (\Exception $e) {
-                    return back()->with('error', 'Failed to upload image.');
-                }
+                // Amazon S3に画像をアップロード
+                $result = $s3->putObject([
+                    'Bucket' => env('AWS_BUCKET'),
+                    'Key'    => 'ep_images/' . $imageName,
+                    'Body'   => file_get_contents($image->getRealPath()),
+                    'ContentType' => $image->getMimeType()
+                ]);
 
-                $imageURL = 'https://storage.googleapis.com/' . env('GOOGLE_CLOUD_BUCKET_NAME') . '/ep_images/' . $imageName;
+                $imageURL = $result['ObjectURL'];
 
-                $newEpImages[] = [
+                $epImages[] = [
                     'image' => $imageURL,
                     'episode_id' => $episode->id, // Episode レコードの ID を関連付ける
                     'episode_number' => $episodeNumber,
@@ -294,18 +321,8 @@ class EpisodeController extends Controller
             }
         }
 
-        $epImages = $episode->ep_images;
-        foreach ($epImages as $epImage) {
-            // Google Cloud Storageから画像を削除
-            $imagePath = str_replace('https://storage.googleapis.com/' . env('GOOGLE_CLOUD_BUCKET_NAME') . '/', '', $epImage->image);
-            $bucket->object($imagePath)->delete();
-
-            // データベースからEpImageレコードを削除
-            $epImage->delete();
-        }
-
         // 新しいEpImageレコードの作成
-        foreach ($newEpImages as $epImage) {
+        foreach ($epImages as $epImage) {
             EpImage::create($epImage);
         }
 
@@ -318,30 +335,32 @@ class EpisodeController extends Controller
             abort(403);
         }
 
-        // Google Cloud Storageの設定
-        $storage = new StorageClient([
-            'projectId' => env('GOOGLE_CLOUD_PROJECT_ID'),
-            'keyFilePath' => env('GOOGLE_CLOUD_KEY_FILE'),
+        // Amazon S3の設定
+        $s3 = new S3Client([
+            'version' => 'latest',
+            'region'  => env('AWS_DEFAULT_REGION'),
+            'credentials' => [
+                'key'    => env('AWS_ACCESS_KEY_ID'),
+                'secret' => env('AWS_SECRET_ACCESS_KEY'),
+            ],
         ]);
 
-        $bucket = $storage->bucket(env('GOOGLE_CLOUD_BUCKET_NAME'));
-
         // エピソードのカバー画像を削除
-        $coverImageName = str_replace('https://storage.googleapis.com/' . env('GOOGLE_CLOUD_BUCKET_NAME') . '/ep_cover_images/', '', $episode->cover_image);
-        $coverImageObject = $bucket->object('ep_cover_images/' . $coverImageName);
-        if ($coverImageObject->exists()) {
-            $coverImageObject->delete();
-        }
+        $coverImageName = str_replace($s3->getObjectUrl(env('AWS_BUCKET'), 'ep_cover_images/'), '', $episode->cover_image);
+        $s3->deleteObject([
+            'Bucket' => env('AWS_BUCKET'),
+            'Key'    => 'ep_cover_images/' . $coverImageName
+        ]);
 
         // エピソードの画像を削除
         $epImages = $episode->epImages;
         if ($epImages) {
             foreach ($epImages as $epImage) {
-                $imageName = str_replace('https://storage.googleapis.com/' . env('GOOGLE_CLOUD_BUCKET_NAME') . '/ep_images/', '', $epImage->image);
-                $imageObject = $bucket->object('ep_images/' . $imageName);
-                if ($imageObject->exists()) {
-                    $imageObject->delete();
-                }
+                $imageName = str_replace($s3->getObjectUrl(env('AWS_BUCKET'), 'ep_images/'), '', $epImage->image);
+                $s3->deleteObject([
+                    'Bucket' => env('AWS_BUCKET'),
+                    'Key'    => 'ep_images/' . $imageName
+                ]);
             }
         }
 

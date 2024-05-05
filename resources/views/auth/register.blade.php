@@ -1,5 +1,5 @@
 <x-guest-layout>
-    <form method="POST" action="{{ route('register') }}">
+    <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
         @csrf
 
         <!-- Name -->
@@ -35,7 +35,7 @@
         </div>
 
         <!-- Avatar -->
-        <!-- <div class="mt-6">
+        <div class="mt-6">
             <x-input-label for="avatar" :value="__('Profile image (Up to 1MB : optional)')" />
             <div class="avatar-upload">
                 <div class="avatar-edit">
@@ -50,7 +50,7 @@
         </div>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.6/cropper.min.js"></script>
-        <script src="{{ asset('js/avatar_cropper.js') }}"></script> -->
+        <script src="{{ asset('js/avatar_cropper.js') }}"></script>
 
         <!-- Profile -->
         <div class="mt-6">
@@ -59,14 +59,14 @@
         </div>
 
         <!-- Notify -->
-        <div class="mt-6">
+        <!-- <div class="mt-6">
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" value="1" id="notify" name="notify">
                 <label class="form-check-label" for="notify">
                     Receive email notifications for new chapters and other important updates
                 </label>
             </div>
-        </div>
+        </div> -->
 
         <div class="flex items-center justify-end mt-4">
             <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('login') }}">

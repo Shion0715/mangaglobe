@@ -12,6 +12,7 @@ use App\Models\User;
 use Google\Cloud\Storage\StorageClient;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Aws\S3\S3Client;
 
 class ProfileController extends Controller
 {
@@ -65,26 +66,37 @@ class ProfileController extends Controller
                     throw new \Exception('base64_decode failed');
                 }
 
+                // Amazon S3に画像をアップロード
+                $s3 = new S3Client([
+                    'version' => 'latest',
+                    'region'  => env('AWS_DEFAULT_REGION'),
+                    'credentials' => [
+                        'key'    => env('AWS_ACCESS_KEY_ID'),
+                        'secret' => env('AWS_SECRET_ACCESS_KEY'),
+                    ],
+                ]);
+
+                // 既存の画像を削除
+                if ($request->user()->avatar) {
+                    $oldName = str_replace('https://' . env('AWS_BUCKET') . '.s3.amazonaws.com/', '', $request->user()->avatar);
+                    $s3->deleteObject([
+                        'Bucket' => env('AWS_BUCKET'),
+                        'Key'    => $oldName
+                    ]);
+                }
+
                 // ユーザーIDを使用して画像を一意に命名
                 $name = 'avatar/' . Str::random(10) . '_' . date('Ymd_His') . '.' . $type;
 
-                // Google Cloud Storageに画像をアップロード
-                $storage = new StorageClient([
-                    'projectId' => env('GOOGLE_CLOUD_PROJECT_ID'),
-                    'keyFilePath' => env('GOOGLE_CLOUD_KEY_FILE'),
+                $s3->putObject([
+                    'Bucket' => env('AWS_BUCKET'),
+                    'Key'    => $name,
+                    'Body'   => $data,
+                    'ContentType' => 'image/' . $type // コンテンツタイプの設定
                 ]);
 
-                $bucket = $storage->bucket(env('GOOGLE_CLOUD_BUCKET_NAME'));
-                $bucket->upload(
-                    $data,
-                    [
-                        'name' => $name,
-                        'uniformBucketLevelAccess' => true
-                    ]
-                );
-
                 // 画像の公開URLを取得
-                $request->user()->avatar = "https://storage.googleapis.com/" . env('GOOGLE_CLOUD_BUCKET_NAME') . "/" . $name;
+                $request->user()->avatar = $s3->getObjectUrl(env('AWS_BUCKET'), $name);
             }
         }
 

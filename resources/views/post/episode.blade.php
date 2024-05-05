@@ -36,6 +36,17 @@
 
         });
     </script>
+
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'G-JL7M7D7P36');
+    </script>
 </head>
 
 <body>
