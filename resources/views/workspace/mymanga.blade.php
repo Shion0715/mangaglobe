@@ -43,9 +43,8 @@
                                         <img src="{{ $post->cover_image }}" class="mr-10 w-24 h-auto sm:w-40 object-contain mb-3">
                                     </a>
                                 </div>
-                                <div class="flex-grow flex flex-col"> <!-- Add items-start here -->
 
-                                
+                                <div class="flex-grow flex flex-col overflow-y-auto" style="max-height: 150px;">
                                     <div class="flex justify-between items-start"> <!-- Add this wrapper -->
                                         <!-- タイトル -->
                                         <a href="{{route('post.show', $post)}}">
@@ -53,29 +52,10 @@
                                                 {{ $post->title }}
                                             </p>
                                         </a>
-                                        <div class="relative">
-                                            <button class="bg-gray-300 text-gray-700 font-semibold py-2 px-4 rounded inline-flex items-center dropdown-toggle" data-dropdown-id="dropdown-{{ $post->id }}">
-                                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                    <path d="M10 12a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0-6a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 12a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" />
-                                                </svg>
-                                            </button>
-                                            <div class="dropdown-menu absolute hidden bg-white shadow-lg rounded mt-2 py-2 w-48 right-0 z-10" id="dropdown-{{ $post->id }}">
-                                                <a class="block px-4 py-2 text-gray-800 hover:bg-gray-200" href="{{ route('post.edit', $post) }}"><i class="fas fa-edit"></i> Edit Manga</a>
-                                                <a class="block px-4 py-2 text-gray-800 hover:bg-gray-200" href="{{ route('episode.index_edit', $post) }}"><i class="fas fa-list"></i> Edit Chapter</a>
-                                                <a class="block px-4 py-2 text-gray-800 hover:bg-gray-200" href="{{ route('episode.create', $post) }}"><i class="fas fa-plus"></i> Create</a>
-                                                @can('delete', $post)
-                                                <form id="deleteForm-{{ $post->id }}" method="post" action="{{ route('post.destroy', $post->id) }}">
-                                                    @csrf
-                                                    @method('delete')
-                                                </form>
-                                                <a href="#" class="block px-4 py-2 text-red-600 hover:bg-red-200" onclick="event.preventDefault(); if(confirm('Are you sure you want to delete?')) document.getElementById('deleteForm-{{ $post->id }}').submit();"><i class="fas fa-trash"></i> Delete</a>
-                                                @endcan
-                                            </div>
-                                        </div>
                                     </div> <!-- End of the wrapper -->
 
                                     <!-- Body -->
-                                    <p class="text-sm sm:text-lg text-gray-800 mb-2 sm:mb-3 break-words" style="overflow-y: scroll; max-height: 100px; @media (min-width: 640px) {max-height: 200px;}">
+                                    <p class="text-sm sm:text-lg text-gray-800 mb-2 sm:mb-3 break-words">
                                         {{ $post->body }}
                                     </p>
 
@@ -93,9 +73,26 @@
                                         <i class="fas fa-eye text-blue-500 ml-4"></i>
                                         <span class="ml-1">{{ $post->views }}</span>
                                     </div>
+                                </div>
 
-                            
-                                    
+                                <div class="relative">
+                                    <button class="bg-gray-300 text-gray-700 font-semibold py-1 px-2 sm:py-2 sm:px-4 rounded inline-flex items-center dropdown-toggle" data-dropdown-id="dropdown-{{ $post->id }}">
+                                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                            <path d="M10 12a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0-6a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 12a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" />
+                                        </svg>
+                                    </button>
+                                    <div class="dropdown-menu absolute hidden bg-white shadow-lg rounded mt-2 py-2 w-48 right-0 z-10" id="dropdown-{{ $post->id }}">
+                                        <a class="block px-4 py-2 text-gray-800 hover:bg-gray-200" href="{{ route('post.edit', $post) }}"><i class="fas fa-edit"></i> Edit Manga</a>
+                                        <a class="block px-4 py-2 text-gray-800 hover:bg-gray-200" href="{{ route('episode.index_edit', $post) }}"><i class="fas fa-list"></i> Edit Chapter</a>
+                                        <a class="block px-4 py-2 text-gray-800 hover:bg-gray-200" href="{{ route('episode.create', $post) }}"><i class="fas fa-plus"></i> Create</a>
+                                        @can('delete', $post)
+                                        <form id="deleteForm-{{ $post->id }}" method="post" action="{{ route('post.destroy', $post->id) }}">
+                                            @csrf
+                                            @method('delete')
+                                        </form>
+                                        <a href="#" class="block px-4 py-2 text-red-600 hover:bg-red-200" onclick="event.preventDefault(); if(confirm('Are you sure you want to delete?')) document.getElementById('deleteForm-{{ $post->id }}').submit();"><i class="fas fa-trash"></i> Delete</a>
+                                        @endcan
+                                    </div>
                                 </div>
                             </div>
                         </div>

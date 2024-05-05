@@ -68,10 +68,12 @@
 
         <!-- Profile編集 -->
         <div>
-            <x-input-label for="profile" :value="__('Profile')" />
-            <x-text-input id="profile" name="profile" type="text" class="mt-1 block w-full" :value="old('profile', $user->profile)" />
+            <x-input-label for="profile" :value="__('Profile (Please fill out only if you are posting mangas : optional)')" />
+            <textarea id="profile" rows="4" name="profile" class="block p-2.5 w-full border-gray-300 rounded-md border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm">{{ old('profile', $user->profile) }}</textarea>
             <x-input-error class="mt-2" :messages="$errors->get('profile')" />
         </div>
+
+
 
         <div class="flex items-center gap-4">
             <x-primary-button>{{ __('Save') }}</x-primary-button>

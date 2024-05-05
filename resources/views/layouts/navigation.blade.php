@@ -12,7 +12,7 @@
 
             <!-- Navigation Links -->
             <div class="sm:-my-px sm:mr-10 sm:flex inline-flex items-center px-1 pt-1 text-xl font-medium leading-5;">
-                <a href="{{ route('post.index') }}">Manga Globe</a>
+                <a href="{{ route('post.index') }}">MangaGlobe</a>
             </div>
             <div class="flex ml-auto items-center">
                 <div class="sm:-my-px sm:flex inline-flex items-center px-1 pt-1 text-xl font-medium leading-5;">

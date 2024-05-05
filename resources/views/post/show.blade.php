@@ -29,13 +29,13 @@
                         <p class="mt-1">
                             <span class="text-sm text-gray-500 mr-2">Author:</span>
                         </p>
-                        <div class="rounded-full w-8 h-8 sm:w-10 h-10">
+                        <div class="rounded-full w-8 h-8 sm:w-9 h-9">
                             {{-- アバター表示 --}}
                             <img src="{{ $post->user->avatar != 'user_default.jpg' ? $post->user->avatar : asset('storage/avatar/user_default.jpg') }}">
                         </div>
                         <!-- 名前 -->
                         <p class="mt-1 ml-3 break-words">
-                            {{$user->name}}
+                        <a href="{{route('auther.index',  ['user' => $user->id])}}">{{ $user->name }}</a>
                         </p>
                     </div>
                     <!-- タグ -->
@@ -48,7 +48,7 @@
                     <!-- ボディ -->
 
                     <p class="mr-4 mt-4 break-words">
-                        <span class="text-sm text-gray-500 mr-2">Story:</span>
+                        <span class="text-sm text-gray-500 mr-2">Story</span>
                         <span id="moreText" class="md:inline lg:inline">{{ $post->body }}</span>
                     </p>
                 </div>
@@ -124,14 +124,6 @@
                         View All Comments
                     </a>
                 </div>
-
-                <style>
-                    @media (max-width: 640px) {
-                        .break-words {
-                            word-break: break-word;
-                        }
-                    }
-                </style>
 
                 @auth
                 <div class="mt-6">

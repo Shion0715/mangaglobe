@@ -12,6 +12,7 @@ use App\Models\EpImage;
 use App\Models\Tag;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Aws\S3\S3Client;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -95,23 +96,24 @@ class PostController extends Controller
 
             $name = date('Ymd_His') . '.' . $type;
 
-            // Create a Google Cloud Storage client
-            $storage = new StorageClient([
-                'projectId' => env('GOOGLE_CLOUD_PROJECT_ID'),
-                'keyFilePath' => env('GOOGLE_CLOUD_KEY_FILE'),
+            // Create an Amazon S3 client
+            $s3 = new S3Client([
+                'version' => 'latest',
+                'region'  => env('AWS_DEFAULT_REGION'),
+                'credentials' => [
+                    'key'    => env('AWS_ACCESS_KEY_ID'),
+                    'secret' => env('AWS_SECRET_ACCESS_KEY'),
+                ],
             ]);
 
-            // Get the bucket
-            $bucket = $storage->bucket(env('GOOGLE_CLOUD_BUCKET_NAME'));
-
             // Upload the file to the bucket
-            $bucket->upload(
-                $data,
-                ['name' => 'cover_images/' . $name]
-            );
-
+            $result = $s3->putObject([
+                'Bucket' => env('AWS_BUCKET'),
+                'Key'    => 'cover_images/' . $name,
+                'Body'   => $data,
+            ]);
             // Get the public URL of the uploaded file
-            $post->cover_image = 'https://storage.googleapis.com/' . env('GOOGLE_CLOUD_BUCKET_NAME') . '/cover_images/' . $name;
+            $post->cover_image = $result['ObjectURL'];
         } else {
             return back()->with('error', 'Invalid image format');
         }
@@ -308,7 +310,7 @@ class PostController extends Controller
         $object->delete();
 
         foreach ($post->episodes as $episode) {
-            $episode->ep_images()->where('post_id', $post->id)->delete(); 
+            $episode->ep_images()->where('post_id', $post->id)->delete();
         }
 
         $post->episodes()->delete();

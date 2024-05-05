@@ -31,4 +31,8 @@ return [
         ],
     ],
 
+    'ga4' => [
+        'property_id' => env('GA4_PROPERTY_ID'),
+    ],
+
 ];

@@ -12,6 +12,7 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('css/index.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('css/index-slider.css') }}">
     <link rel="stylesheet" href="{{ asset('css/ranking.css') }}">
     <link rel="stylesheet" href="{{ asset('css/show.css') }}">
@@ -27,6 +28,19 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
     <script src="{{ asset('js/show.js') }}"></script>
     <script src="{{ asset('js/responsive_dropdown.js') }}"></script>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JL7M7D7P36"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'G-JL7M7D7P36');
+    </script>
 </head>
 
 <body class="font-sans antialiased bg-gray-100">

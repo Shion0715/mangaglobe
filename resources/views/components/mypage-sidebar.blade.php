@@ -6,5 +6,8 @@
         <li class="mb-4">
             <a href="{{ route('profile.show') }}" class="hover:text-black {{ request()->routeIs('profile.show') ? 'text-black' : 'text-gray-500' }}">Account</a>
         </li>    
+        <li class="mb-4">
+            <a href="{{ route('cash.index') }}" class="hover:text-black {{ request()->routeIs('cash.index') ? 'text-black' : 'text-gray-500' }}">Cash</a>
+        </li>  
     </ul>
 </div>

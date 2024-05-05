@@ -43,6 +43,7 @@
                                 <div class="flex">
                                     <!-- 画像のスライド -->
                                     @foreach($posts as $post)
+                                    @if($post)
                                     <div class="flex flex-col mt-1 m-3 mx-auto">
                                         <a href="{{route('post.show', $post)}}" class="mr-5">
                                             <img src="{{ $post->cover_image }}">
@@ -62,6 +63,7 @@
                                             </h1>
                                         </div>
                                     </div>
+                                    @endif
                                     @endforeach
                                 </div>
                             </div>
@@ -83,13 +85,14 @@
                                 <div class="flex">
                                     <!-- 画像のスライド -->
                                     @foreach($likes as $like)
+                                    @if($like->post)
                                     <div class="flex flex-col mt-1 m-3 mx-auto">
-                                        <a href="{{route('post.show', $like->post)}}" class="mr-5">
+                                        <a href="{{route('post.show', $like->post_id)}}" class="mr-5">
                                             <img src="{{ $like->post->cover_image }}">
                                         </a>
                                         <!-- タイトル -->
                                         <h1 class="text-lg text-gray-700 font-semibold hover:underline cursor-pointer float-left index-post-title">
-                                            <a href="{{route('post.show', $like->post)}}">{{$like->post->title}}</a>
+                                            <a href="{{route('post.show', $like->post_id)}}">{{$like->post->title}}</a>
                                         </h1>
                                         <div class="flex mt-5">
                                             <div class=" w-8 h-18">
@@ -98,10 +101,11 @@
                                             </div>
                                             <!-- 名前 -->
                                             <h1 class="text-lg text-gray-700 font-nomal hover:underline m-1 ml-1 sm:ml-2 cursor-pointer float-left index-user-name">
-                                                <a href="{{route('auther.index',  ['user' => $like->post->user->id])}}">{{ \Illuminate\Support\Str::limit($like->post->user->name, 9) }}</a>
+                                                <a href="{{route('auther.index',  ['user' => $like->user->id])}}">{{ \Illuminate\Support\Str::limit($like->user->name, 9) }}</a>
                                             </h1>
                                         </div>
                                     </div>
+                                    @endif
                                     @endforeach
                                 </div>
                             </div>
