@@ -99,7 +99,7 @@ class PostController extends Controller
             // Create an Amazon S3 client
             $s3 = new S3Client([
                 'version' => 'latest',
-                'region'  => env('AWS_DEFAULT_REGION'),
+                'region'  => 'ap-northeast-1',
                 'credentials' => [
                     'key'    => env('AWS_ACCESS_KEY_ID'),
                     'secret' => env('AWS_SECRET_ACCESS_KEY'),
