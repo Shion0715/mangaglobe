@@ -108,7 +108,7 @@ class PostController extends Controller
 
             // Upload the file to the bucket
             $result = $s3->putObject([
-                'Bucket' => env('AWS_BUCKET'),
+                'Bucket' => config('filesystems.disks.s3.bucket'),
                 'Key'    => 'cover_images/' . $name,
                 'Body'   => $data,
             ]);
