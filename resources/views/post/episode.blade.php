@@ -23,7 +23,7 @@
             $(".o_button").attr("onClick", "location.href='" + site + "'");
             $(".copy").text(copy);
             @php
-            $sorted_ep_images = $ep_images - > sortBy('number');
+            $sorted_ep_images = $ep_images -> sortBy('number');
             @endphp
 
             @foreach($sorted_ep_images as $ep_image)
