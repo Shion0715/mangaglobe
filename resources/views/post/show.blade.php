@@ -21,6 +21,9 @@
                         <!-- いいねボタン -->
                         <i class="like-btn fa-heart ml-3 {{ $post->isLikedBy(Auth::user()) ? 'text-red-500 fas' : 'text-gray-500 far' }}" data-postid="{{ $post->id }}"></i>
                         <span class="{{ $post->isLikedBy(Auth::user()) ? 'text-red-500' : 'text-gray-500' }}">{{ $post->likes()->count() }}</span>
+                        <!-- ビュー数 -->
+                        <i class="fa-eye ml-3 text-gray-500 fas"></i>
+                        <span class="text-gray-500"></span>
                         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
                         <script src="{{ asset('js/like.js') }}"></script>
                     </div>
@@ -35,7 +38,7 @@
                         </div>
                         <!-- 名前 -->
                         <p class="mt-1 ml-3 break-words">
-                        <a href="{{route('auther.index',  ['user' => $user->id])}}">{{ $user->name }}</a>
+                            <a href="{{route('auther.index',  ['user' => $user->id])}}">{{ $user->name }}</a>
                         </p>
                     </div>
                     <!-- タグ -->

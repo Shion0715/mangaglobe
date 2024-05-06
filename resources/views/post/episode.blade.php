@@ -23,7 +23,7 @@
             $(".o_button").attr("onClick", "location.href='" + site + "'");
             $(".copy").text(copy);
             @php
-            $sorted_ep_images = $ep_images -> sortBy('number');
+            $sorted_ep_images = $ep_images - > sortBy('number');
             @endphp
 
             @foreach($sorted_ep_images as $ep_image)
@@ -33,10 +33,11 @@
 
             /**長すぎるからh1の方のタイトル改行したいって時var/コメントアウト解除して編集**/
             //$("h1").html("サンプル<br>サンプル");
-
         });
     </script>
 
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JL7M7D7P36"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
 

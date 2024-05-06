@@ -100,9 +100,11 @@ Route::get('/post/{post}/navigate/{number}', [EpisodeController::class, 'navigat
 // 作者表示
 Route::get('/user/{user}', [AuthorController::class, 'index'])->name('auther.index');
 
+// いいね
 Route::post('/posts/{post}/like', [LikeController::class, 'like'])->name('posts.like');
 Route::delete('/posts/{post}/like', [LikeController::class, 'unlike'])->name('posts.unlike');
 
+// コメント
 Route::get('/post/{post}/comment', [CommentController::class, 'show'])->name('comment.show');
 
 // Contact
