@@ -17,14 +17,7 @@ $(document).ready(function () {
                     likeCount.addClass('text-red-500').text(response.likes_count);
                 }.bind(this),
                 error: function (xhr) {
-                    if (xhr.status === 401) {
-                        alert('いいねするにはログインが必要です');
-                        window.location.href = '/login'; // ログインページへリダイレクト
-                    } else if (xhr.status === 0) {
-                        alert('ネットワークエラーが発生しました。');
-                    } else {
-                        alert('エラーが発生しました。');
-                    }
+                    alert('You need to log in.');
                 }
             });
         } else {
@@ -40,14 +33,7 @@ $(document).ready(function () {
                     likeCount.removeClass('text-red-500').text(response.likes_count);
                 }.bind(this),
                 error: function (xhr) {
-                    if (xhr.status === 401) {
-                        alert('いいねするにはログインが必要です');
-                        window.location.href = '/login'; // ログインページへリダイレクト
-                    } else if (xhr.status === 0) {
-                        alert('ネットワークエラーが発生しました。');
-                    } else {
-                        alert('エラーが発生しました。');
-                    }
+                    alert('You need to log in.');
                 }
             });
         }

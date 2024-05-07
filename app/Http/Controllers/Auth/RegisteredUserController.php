@@ -14,6 +14,8 @@ use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 use Illuminate\Support\Str;
 use Aws\S3\S3Client;
+use Illuminate\Support\Facades\Storage;
+
 
 class RegisteredUserController extends Controller
 {
@@ -67,24 +69,10 @@ class RegisteredUserController extends Controller
             $name = 'avatar/' . Str::random(10) . '_' . date('Ymd_His') . '.' . $type;
 
             // Amazon S3に画像をアップロード
-            $s3 = new S3Client([
-                'version' => 'latest',
-                'region'  => env('AWS_DEFAULT_REGION'),
-                'credentials' => [
-                    'key'    => env('AWS_ACCESS_KEY_ID'),
-                    'secret' => env('AWS_SECRET_ACCESS_KEY'),
-                ],
-            ]);
-
-            $s3->putObject([
-                'Bucket' => env('AWS_BUCKET'),
-                'Key'    => $name,
-                'Body'   => $data,
-                'ContentType' => 'image/' . $type // コンテンツタイプの設定
-            ]);
+            Storage::disk('s3')->put($name, $data, 'public');
 
             // 画像の公開URLを取得
-            $attr['avatar'] = $s3->getObjectUrl(env('AWS_BUCKET'), $name);
+            $attr['avatar'] = Storage::disk('s3')->url($name);
         }
 
         $user = User::create($attr);

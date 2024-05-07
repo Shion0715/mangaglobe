@@ -47,7 +47,7 @@
                     </div>
                     <span class="mt-2 text-sm text-gray-500">File: png,jpg,jpeg | 2MB or less </span>
                     <div>
-                        <input class="mt-4" id="cover_image" type="file" name="cover_image" value="{{ old('cover_image') }}">
+                        <input class="mt-4" id="cover_image" type="file" name="cover_image">
                         <input type="hidden" id="cropped_image" name="cropped_image">
                     </div>
                     <div class="mt-4 max-w-[200px] max-h-auto overflow-hidden">
@@ -85,10 +85,15 @@
                     </div>
                 </div>
 
-                <div>
-                    <div class="mt-10 font-semibold leading-none">Genre (action,fantasy,sports, etc)</div>
+                <div class="w-full flex flex-col mt-10">
+                    <div class="flex">
+                        <div class="font-semibold leading-none">Genre (action,fantasy,sports, etc)</div>
+                        @error('tags.*')
+                        <p class="text-red-500 font-semibold leading-none ml-4">{{ $message }}</p>
+                        @enderror
+                    </div>
                     <div class="flex mt-4 flex-wrap">
-                        @for ($i = 0; $i < 5; $i++) <input type="text" name="tags[]" id="tags{{ $i }}" class="w-32 h-8 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300 mr-4 mb-3 sm:mb-0">
+                        @for ($i = 0; $i < 5; $i++) <input type="text" name="tags[]" id="tags{{ $i }}" value="{{ old('tags.' . $i) }}" class="w-32 h-8 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300 mr-4 mb-3 sm:mb-0">
                             @endfor
                     </div>
                 </div>
@@ -102,11 +107,11 @@
                     </div>
                     <div class="flex mt-4">
                         <div class="flex items-center mr-4">
-                            <input id="target_age1" type="radio" value="Available for all ages" name="target_age" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" {{ old('target_age') == '連載中' ? 'checked' : '' }}>
+                            <input id="target_age1" type="radio" value="Available for all ages" name="target_age" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" {{ old('target_age') == 'Available for all ages' ? 'checked' : '' }}>
                             <label for="target_age1" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Available for all ages</label>
                         </div>
                         <div class="flex items-center mr-4">
-                            <input id="target_age2" type="radio" value="18+" name="target_age" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" {{ old('target_age') == '完結' ? 'checked' : '' }}>
+                            <input id="target_age2" type="radio" value="18+" name="target_age" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" {{ old('target_age') == '18+' ? 'checked' : '' }}>
                             <label for="target_age2" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">18+</label>
                         </div>
                     </div>
@@ -121,44 +126,34 @@
                     </div>
                     <div class="flex mt-4">
                         <div class="flex items-center mr-4">
-                            <input id="recieve_comment1" type="radio" value="yes" name="recieve_comment" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" {{ old('recieve_comment') == '受け付ける' ? 'checked' : '' }}>
+                            <input id="recieve_comment1" type="radio" value="yes" name="recieve_comment" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" {{ old('recieve_comment') == 'yes' ? 'checked' : '' }}>
                             <label for="recieve_comment1" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Yes</label>
                         </div>
                         <div class="flex items-center mr-4">
-                            <input id="recieve_comment2" type="radio" value="no" name="recieve_comment" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" {{ old('recieve_comment') == '受け付けない' ? 'checked' : '' }}>
+                            <input id="recieve_comment2" type="radio" value="no" name="recieve_comment" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" {{ old('recieve_comment') == 'no' ? 'checked' : '' }}>
                             <label for="recieve_comment2" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">No</label>
                         </div>
                     </div>
                 </div>
 
-                <form onsubmit="return validateTerms();">
-                    <div class="w-full flex flex-col mt-10">
-                        <div class="flex items-center">
-                            <input id="terms" type="checkbox" name="terms" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" {{ old('terms') ? 'checked' : '' }}>
-                            <label for="terms" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
-                                I agree to the <a href="/terms" target="_blank" class="text-blue-500">Terms of Service</a>
-                            </label>
-                            @error('terms')
-                            <p class="text-red-500 font-semibold leading-none">&nbsp;{{ $message }}</p>
-                            @enderror
-                        </div>
+                <div class="w-full flex flex-col mt-10">
+                    <div class="flex items-center">
+                        <input id="terms" type="checkbox" name="terms" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                        <label for="terms" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300 flex flex-row">
+                            I agree to the
+                            <a href="/terms" target="_blank" class="text-blue-500 ml-2">Terms of Service</a>
+                            <a href="/copyright" target="_blank" class="text-blue-500 ml-2">Copyright Policy</a>
+                            <a href="/content" target="_blank" class="text-blue-500 ml-2">Content Guidelines</a>
+                        </label>
+                        @error('terms')
+                        <p class="text-red-500 font-semibold leading-none">&nbsp;{{ $message }}</p>
+                        @enderror
                     </div>
+                </div>
 
-                    <x-primary-button class="my-10">
-                        Create Chapter 1
-                    </x-primary-button>
-                </form>
-
-                <script>
-                    function validateTerms() {
-                        if (!document.getElementById('terms').checked) {
-                            alert('You must agree to the terms of service before proceeding.');
-                            return false;
-                        }
-                        return true;
-                    }
-                </script>
-
+                <x-primary-button class="my-10">
+                    Create Chapter 1
+                </x-primary-button>
             </form>
         </div>
     </div>

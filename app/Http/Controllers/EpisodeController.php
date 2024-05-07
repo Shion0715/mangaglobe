@@ -7,8 +7,10 @@ use App\Models\Post;
 use Illuminate\Support\Facades\Cookie;
 use App\Models\EpImage;
 use Illuminate\Http\Request;
-use Google\Cloud\Storage\StorageClient;
 use Aws\S3\S3Client;
+use App\Rules\UniqueEpisodeNumber;
+use Illuminate\Validation\Rule;
+
 
 class EpisodeController extends Controller
 {
@@ -26,14 +28,34 @@ class EpisodeController extends Controller
             return back()->with('error', 'You do not have permission to edit this post');
         }
 
+        $messages = [
+            'ep_title.required' => 'This field is required',
+            'ep_title.max' => 'This field is in 50 words or less',
+            'ep_cover_image.required' => 'Please select the image',
+            'ep_cover_image.image' => 'Please select the image',
+            'images.*.required' => 'Image upload is required',
+            'images.*.image' => 'Uploaded file must be an image',
+            'images.*.mimes' => 'Image must be of type png, jpg, or jpeg',
+            'progress.required' => 'Please check the button',
+            'episode_number.required' => 'Episode number is required',
+            'episode_number.numeric' => 'Episode number must be an number',
+            'episode_number.unique' => 'This episode already exists',
+        ];
+
         $request->validate([
-            'ep_title' => 'required|max:255',
+            'ep_title' => 'required|max:50',
             'ep_cover_image' => 'required|image',
             'images' => 'required',
             'images.*' => 'required|image|mimes:png,jpg,jpeg',
             'progress' => 'required',
-            'episode_number' => 'required|integer|unique:episodes,number',
-        ]);
+            'episode_number' => [
+                'required',
+                'numeric',
+                Rule::unique('episodes', 'number')->where(function ($query) use ($post) {
+                    return $query->where('post_id', $post->id);
+                }),
+            ],
+        ], $messages);
 
         // Episode レコードの保存
         $episode = new Episode();
@@ -52,44 +74,40 @@ class EpisodeController extends Controller
                 'secret' => env('AWS_SECRET_ACCESS_KEY'),
             ],
         ]);
-
-        if (preg_match('/^data:image\/(\w+);base64,/', request('cropped_ep_cover_image'), $type)) {
-            $data = substr(request('cropped_ep_cover_image'), strpos(request('cropped_ep_cover_image'), ',') + 1);
-            $type = strtolower($type[1]); // jpg, png, gif
-
-            if (!in_array($type, ['jpg', 'jpeg', 'gif', 'png'])) {
-                throw new \Exception('invalid image type');
+        if (request('cropped_ep_cover_image')) {
+            if (preg_match('/^data:image\/(\w+);base64,/', request('cropped_ep_cover_image'), $type)) {
+                $data = substr(request('cropped_ep_cover_image'), strpos(request('cropped_ep_cover_image'), ',') + 1);
+                $type = strtolower($type[1]); // jpg, png, gif
+                if (!in_array($type, ['jpg', 'jpeg', 'gif', 'png'])) {
+                    throw new \Exception('invalid image type');
+                }
+                $data = base64_decode($data);
+                if ($data === false) {
+                    throw new \Exception('base64_decode failed');
+                }
+                $name = date('Ymd_His') . '.' . $type;
+                // Amazon S3に画像をアップロード
+                $result = $s3->putObject([
+                    'Bucket' => env('AWS_BUCKET'),
+                    'Key'    => 'ep_cover_images/' . $name,
+                    'Body'   => $data,
+                ]);
+                // Get the public URL of the uploaded file
+                $episode->cover_image = $result['ObjectURL'];
+            } else {
+                return back()->with('error', 'Invalid image format');
             }
-
-            $data = base64_decode($data);
-
-            if ($data === false) {
-                throw new \Exception('base64_decode failed');
-            }
-
-            $name = date('Ymd_His') . '.' . $type;
-
-            // Amazon S3に画像をアップロード
-            $result = $s3->putObject([
-                'Bucket' => env('AWS_BUCKET'),
-                'Key'    => 'ep_cover_images/' . $name,
-                'Body'   => $data,
-            ]);
-
-            // Get the public URL of the uploaded file
-            $episode->cover_image = $result['ObjectURL'];
         } else {
-            return back()->with('error', 'Invalid image format');
+            $episode->cover_image = request('old_ep_cover_image');
         }
         $episode->save();
+
 
         // Episode Imageの保存
         $epImages = [];
         $episodeNumber = $request->input('episode_number');
-
         // 画像の順序情報を取得
         $imageOrder = explode(',', $request->input('image_order'));
-
         // Create an Amazon S3 client
         $s3 = new S3Client([
             'version' => 'latest',
@@ -99,7 +117,6 @@ class EpisodeController extends Controller
                 'secret' => env('AWS_SECRET_ACCESS_KEY'),
             ],
         ]);
-
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $key => $image) {
                 $imageName = date('Ymd_His') . '_' . $image->getClientOriginalName();
@@ -122,10 +139,10 @@ class EpisodeController extends Controller
                 ];
             }
         }
-
         foreach ($epImages as $epImage) {
             EpImage::create($epImage);
         }
+
 
         return redirect()->route('mymanga')->with('message', 'Chapter created successfully');
     }
@@ -212,17 +229,32 @@ class EpisodeController extends Controller
             return back()->with('error', 'You do not have permission to edit this episode');
         }
 
+        $messages = [
+            'ep_title.required' => 'This field is required',
+            'ep_title.max' => 'This field is in 50 words or less',
+            'ep_cover_image.image' => 'Please select the image',
+            'images.*.required' => 'Image upload is required',
+            'images.*.image' => 'Uploaded file must be an image',
+            'images.*.mimes' => 'Image must be of type png, jpg, or jpeg',
+            'progress.required' => 'Please check the button',
+            'episode_number.required' => 'Episode number is required',
+            'episode_number.numeric' => 'Episode number must be an number',
+        ];
+
         $request->validate([
-            'ep_title' => 'required|max:255',
-            'ep_cover_image' => 'required|image',
+            'ep_title' => 'required|max:50',
+            'ep_cover_image' =>  'sometimes|image',
             'images' => 'required',
             'images.*' => 'required|image|mimes:png,jpg,jpeg',
             'progress' => 'required',
-        ]);
+            'episode_number' =>  'required|numeric',
+        ], $messages);
 
         // Episode レコードの更新
         $episode->title = $request->input('ep_title');
         $episode->progress = $request->input('progress');
+        $episode->number = $request->input('episode_number');
+
 
         // カバー画像の保存
         $s3 = new S3Client([
@@ -233,7 +265,6 @@ class EpisodeController extends Controller
                 'secret' => env('AWS_SECRET_ACCESS_KEY'),
             ],
         ]);
-
         if (preg_match('/^data:image\/(\w+);base64,/', request('cropped_ep_cover_image'), $type)) {
             $data = substr(request('cropped_ep_cover_image'), strpos(request('cropped_ep_cover_image'), ',') + 1);
             $type = strtolower($type[1]); // jpg, png, gif
@@ -260,23 +291,13 @@ class EpisodeController extends Controller
             // Get the public URL of the uploaded file
             $episode->cover_image = $result['ObjectURL'];
         } else {
-            return back()->with('error', 'Invalid image format');
+            $episode->cover_image = request('old_ep_cover_image');
         }
-
-        $episode->number = $request->input('episode_number');
 
         $episode->save();
 
+
         // エピソードの画像を更新
-        // Create an Amazon S3 client
-        $s3 = new S3Client([
-            'version' => 'latest',
-            'region'  => env('AWS_DEFAULT_REGION'),
-            'credentials' => [
-                'key'    => env('AWS_ACCESS_KEY_ID'),
-                'secret' => env('AWS_SECRET_ACCESS_KEY'),
-            ],
-        ]);
         // 既存の画像を削除
         $epImages = $episode->ep_images;
         foreach ($epImages as $epImage) {
@@ -290,14 +311,15 @@ class EpisodeController extends Controller
             $epImage->delete();
         }
 
-
         // 新しい画像のアップロードと保存
         $epImages = [];
         $episodeNumber = $request->input('episode_number');
-
         // 画像の順序情報を取得
         $imageOrder = explode(',', $request->input('image_order'));
-
+        // 既存の画像のIDを取得
+        $existing_images = $request->input('existing_images', []);
+        // existing_images配列にない画像を削除
+        $episode->ep_images()->whereNotIn('id', $existing_images)->delete();
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $key => $image) {
                 $imageName = date('Ymd_His') . '_' . $image->getClientOriginalName();
@@ -320,7 +342,6 @@ class EpisodeController extends Controller
                 ];
             }
         }
-
         // 新しいEpImageレコードの作成
         foreach ($epImages as $epImage) {
             EpImage::create($epImage);

@@ -57,7 +57,7 @@
                     <label for="avatar"></label>
                 </div>
                 <div class="mt-4 max-w-[200px] max-h-auto overflow-hidden">
-                    <img id="avatar_preview" src="{{ $user->avatar != 'user_default.jpg' ? $user->avatar : asset('storage/avatar/user_default.jpg') }}" class="object-contain">
+                    <img id="avatar_preview" src="{{ $user->avatar ? $user->avatar : 'https://mangaglobe-bucket.s3.amazonaws.com/avatar/user_default.jpg' }}" class="object-contain">
                 </div>
                 <x-input-error class="mt-2" :messages="$errors->get('avatar')" />
             </div>

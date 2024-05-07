@@ -3,9 +3,6 @@
         <h2 class="ml-2 font-semibold text-xl text-gray-800 leading-tight">
             Edit
         </h2>
-
-        <x-message :message="session('message')" />
-
     </x-slot>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -46,8 +43,9 @@
                     <div>
                         <input class="mt-4" id="cover_image" type="file" name="cover_image" value="{{ old('cover_image', $post->cover_image) }}">
                         <input type="hidden" id="cropped_image" name="cropped_image">
+                        <input type="hidden" name="old_cover_image" value="{{ $post->cover_image }}">
                     </div>
-                    <span class="mt-2 text-sm text-gray-500">File: png,jpg,jpeg | 2MB or less &nbsp;&nbsp;&nbsp; Please choose your favorite frame/scene from the chapter. </span>
+                    <span class="mt-2 text-sm text-gray-500">File: png,jpg,jpeg | 2MB or less</span>
                     <div class="mt-4 max-w-[200px] max-h-auto overflow-hidden">
                         @if($post->cover_image)
                         <img id="original_cover_image" src="{{ $post->cover_image }}" alt="Cover Image" class="mt-3" style="height:auto; width: 200px;">
@@ -90,7 +88,7 @@
                 <div>
                     <div class="mt-10 font-semibold leading-none">Genre (action,fantasy,sports, etc)</div>
                     <div class="flex mt-4 flex-wrap">
-                        @for ($i = 0; $i < 5; $i++) <input type="text" name="tags[]" id="tags{{ $i }}" class="w-32 h-8 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300 mr-4 mb-3 sm:mb-0">
+                        @for ($i = 0; $i < 5; $i++) <input type="text" name="tags[]" id="tags{{ $i }}" value="{{ $tags[$i] ?? '' }}" class="w-32 h-8 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300 mr-4 mb-3 sm:mb-0">
                             @endfor
                     </div>
                 </div>
@@ -104,11 +102,11 @@
                     </div>
                     <div class="flex mt-4">
                         <div class="flex items-center mr-4">
-                            <input id="target_age1" type="radio" value="Available for all ages" name="target_age" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" {{ old('target_age') == '連載中' ? 'checked' : '' }}>
+                            <input id="target_age1" type="radio" value="Available for all ages" name="target_age" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" {{ old('target_age', $post->target_age) == 'Available for all ages' ? 'checked' : '' }}>
                             <label for="target_age1" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Available for all ages</label>
                         </div>
                         <div class="flex items-center mr-4">
-                            <input id="target_age2" type="radio" value="18+" name="target_age" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" {{ old('target_age') == '完結' ? 'checked' : '' }}>
+                            <input id="target_age2" type="radio" value="18+" name="target_age" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" {{ old('target_age', $post->target_age) == '18+' ? 'checked' : '' }}>
                             <label for="target_age2" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">18+</label>
                         </div>
                     </div>

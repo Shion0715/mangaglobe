@@ -81,7 +81,9 @@ class User extends Authenticatable  implements MustVerifyEmail
         return $this->hasMany(EpImage::class);
     }
 
-
+    public function sendEmailVerificationNotification(){
+        $this->notify(new NewVerifyEmail());
+    }
 
     public function cash()
     {

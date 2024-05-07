@@ -3,13 +3,6 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex h-16">
 
-            <!-- Logo -->
-            <div class="shrink-0 flex items-center">
-                <a href="{{ route('post.index') }}">
-                    <!-- <img src="{{asset('logo/23379777.jpg')}}" style="max-height:70px;"> -->
-                </a>
-            </div>
-
             <!-- Navigation Links -->
             <div class="sm:-my-px sm:mr-10 sm:flex inline-flex items-center px-1 pt-1 text-xl font-medium leading-5;">
                 <a href="{{ route('post.index') }}">MangaGlobe</a>

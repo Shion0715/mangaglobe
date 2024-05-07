@@ -19,13 +19,17 @@
                     </p>
                     <div class="flex">
                         <!-- いいねボタン -->
-                        <i class="like-btn fa-heart ml-3 {{ $post->isLikedBy(Auth::user()) ? 'text-red-500 fas' : 'text-gray-500 far' }}" data-postid="{{ $post->id }}"></i>
-                        <span class="{{ $post->isLikedBy(Auth::user()) ? 'text-red-500' : 'text-gray-500' }}">{{ $post->likes()->count() }}</span>
-                        <!-- ビュー数 -->
-                        <i class="fa-eye ml-3 text-gray-500 fas"></i>
-                        <span class="text-gray-500"></span>
+                        <div class="mr-3">
+                            <i class="like-btn fa-heart {{ $post->isLikedBy(Auth::user()) ? 'text-red-500 fas' : 'text-gray-500 far' }}" data-postid="{{ $post->id }}"></i>
+                            <span class="{{ $post->isLikedBy(Auth::user()) ? 'text-red-500' : 'text-gray-500' }}">{{ $post->likes()->count() }}</span>
+                        </div>
                         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
                         <script src="{{ asset('js/like.js') }}"></script>
+                        <!-- ビュー数 -->
+                        <div>
+                            <i class="fa-eye text-gray-500 fas"></i>
+                            <span class="text-gray-500">{{ $post->views_count }}</span>
+                        </div>
                     </div>
                     <!-- 作者 -->
                     <div class="flex mt-4">
@@ -34,7 +38,7 @@
                         </p>
                         <div class="rounded-full w-8 h-8 sm:w-9 h-9">
                             {{-- アバター表示 --}}
-                            <img src="{{ $post->user->avatar != 'user_default.jpg' ? $post->user->avatar : asset('storage/avatar/user_default.jpg') }}">
+                            <img id="avatar_preview" src="{{ $post->user->avatar ? $post->user->avatar : 'https://mangaglobe-bucket.s3.amazonaws.com/avatar/user_default.jpg' }}" class="object-contain">
                         </div>
                         <!-- 名前 -->
                         <p class="mt-1 ml-3 break-words">
@@ -97,6 +101,7 @@
             </div>
         </div>
 
+        <!-- コメント -->
         <div class="container mx-auto">
             <div class="mt-8">
                 <h2 class="text-2xl font-bold">Comments</h2>
@@ -105,7 +110,7 @@
                     <div class="flex items-center">
                         <div class="flex-shrink-0">
                             <!-- Replace with user avatar -->
-                            <img class="h-10 w-10" src="{{ $user->avatar != 'user_default.jpg' ? $user->avatar : asset('storage/avatar/user_default.jpg') }}" alt="{{ $comment->user->name }}">
+                            <img class="h-10 w-10" src="{{ $post->user->avatar ? $post->user->avatar : 'https://mangaglobe-bucket.s3.amazonaws.com/avatar/user_default.jpg' }}" class="object-contain">
                         </div>
                         <div class="ml-3">
                             <p class="text-sm font-medium text-gray-900">

@@ -65,6 +65,7 @@ class PostController extends Controller
             'tags.*.max' => 'Each tag must be 15 characters or less',
             'target_age.required' => 'Please check the button',
             'recieve_comment.required' => 'Please check the button',
+            'terms.accepted' => 'You must agree to the terms.',
         ];
 
         $inputs = $request->validate([
@@ -75,7 +76,9 @@ class PostController extends Controller
             'tags.*' => 'max:15',
             'target_age' => 'required',
             'recieve_comment' => 'required',
+            'terms' => 'accepted',
         ], $messages);
+
         $post = new Post();
         $post->title = $inputs['title'];
         $post->body = $inputs['body'];
@@ -184,7 +187,9 @@ class PostController extends Controller
             abort(403);
         }
 
-        return view('post.edit', compact('post'));
+        $tags = $post->tags->pluck('name')->toArray();
+
+        return view('post.edit', compact('post', 'tags'));
     }
 
     /**
@@ -205,58 +210,63 @@ class PostController extends Controller
             'body.max' => 'This field is in 500 words or less',
             'cover_image.image' => 'Please select the image',
             'type.required' => 'This field is required',
+            'tags.*.max' => 'Each tag must be 15 characters or less',
             'target_age.required' => 'Please check the button',
             'recieve_comment.required' => 'Please check the button',
         ];
-
 
         $inputs = $request->validate([
             'title' => 'required|max:50',
             'body' => 'required|max:500',
             'cover_image' => 'sometimes|image',
             'type' => 'required',
+            'tags.*' => 'max:15',
             'target_age' => 'required',
             'recieve_comment' => 'required',
         ], $messages);
 
         $post->title = $inputs['title'];
         $post->body = $inputs['body'];
-        if (preg_match('/^data:image\/(\w+);base64,/', request('cropped_image'), $type)) {
-            $data = substr(request('cropped_image'), strpos(request('cropped_image'), ',') + 1);
-            $type = strtolower($type[1]); // jpg, png, gif
+        if (request('cropped_image')) {
+            if (preg_match('/^data:image\/(\w+);base64,/', request('cropped_image'), $type)) {
+                $data = substr(request('cropped_image'), strpos(request('cropped_image'), ',') + 1);
+                $type = strtolower($type[1]); // jpg, png, gif
 
-            if (!in_array($type, ['jpg', 'jpeg', 'gif', 'png'])) {
-                throw new \Exception('invalid image type');
+                if (!in_array($type, ['jpg', 'jpeg', 'gif', 'png'])) {
+                    throw new \Exception('invalid image type');
+                }
+
+                $data = base64_decode($data);
+
+                if ($data === false) {
+                    throw new \Exception('base64_decode failed');
+                }
+
+                $name = date('Ymd_His') . '.' . $type;
+
+                // Create an Amazon S3 client
+                $s3 = new S3Client([
+                    'version' => 'latest',
+                    'region'  => env('AWS_DEFAULT_REGION'),
+                    'credentials' => [
+                        'key'    => env('AWS_ACCESS_KEY_ID'),
+                        'secret' => env('AWS_SECRET_ACCESS_KEY'),
+                    ],
+                ]);
+
+                // Upload the file to the bucket
+                $result = $s3->putObject([
+                    'Bucket' => env('AWS_BUCKET'),
+                    'Key'    => 'cover_images/' . $name,
+                    'Body'   => $data,
+                ]);
+                // Get the public URL of the uploaded file
+                $post->cover_image = $result['ObjectURL'];
+            } else {
+                return back()->with('error', 'Invalid image format');
             }
-
-            $data = base64_decode($data);
-
-            if ($data === false) {
-                throw new \Exception('base64_decode failed');
-            }
-
-            $name = date('Ymd_His') . '.' . $type;
-
-            // Create an Amazon S3 client
-            $s3 = new S3Client([
-                'version' => 'latest',
-                'region'  => env('AWS_DEFAULT_REGION'),
-                'credentials' => [
-                    'key'    => env('AWS_ACCESS_KEY_ID'),
-                    'secret' => env('AWS_SECRET_ACCESS_KEY'),
-                ],
-            ]);
-
-            // Upload the file to the bucket
-            $result = $s3->putObject([
-                'Bucket' => env('AWS_BUCKET'),
-                'Key'    => 'cover_images/' . $name,
-                'Body'   => $data,
-            ]);
-            // Get the public URL of the uploaded file
-            $post->cover_image = $result['ObjectURL'];
         } else {
-            return back()->with('error', 'Invalid image format');
+            $post->cover_image = request('old_cover_image');
         }
         $post->type = $inputs['type'];
         $post->target_age = $inputs['target_age'];

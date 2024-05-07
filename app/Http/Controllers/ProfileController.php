@@ -96,7 +96,12 @@ class ProfileController extends Controller
                 ]);
 
                 // 画像の公開URLを取得
-                $request->user()->avatar = $s3->getObjectUrl(env('AWS_BUCKET'), $name);
+                $avatarUrl = $s3->getObjectUrl(env('AWS_BUCKET'), $name);
+
+                // データベースに保存
+                $user = $request->user();
+                $user->avatar = $avatarUrl;
+                $user->save();
             }
         }
 
