@@ -7,9 +7,9 @@
         </p>
 
         @if (session('status') == 'verification-link-sent')
-            <div class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
-                <strong class="font-bold">{{ __('A new verification link has been sent to the email address you provided during registration.') }}</strong>
-            </div>
+        <div class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+            <strong class="font-bold">{{ __('A new verification link has been sent to the email address you provided during registration.') }}</strong>
+        </div>
         @endif
 
         <div class="mt-4 flex items-center justify-between">
@@ -17,7 +17,7 @@
                 @csrf
 
                 <div>
-                    <x-primary-button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    <x-primary-button class="bg-blue-500 hover:bg-blue-700 text-white font-bold rounded sm:py-2 sm:px-4 py-1 px-2">
                         {{ __('Resend Verification Email') }}
                     </x-primary-button>
                 </div>

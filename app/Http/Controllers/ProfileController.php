@@ -78,10 +78,10 @@ class ProfileController extends Controller
 
                 // 既存の画像を削除
                 if ($request->user()->avatar) {
-                    $oldName = str_replace('https://' . env('AWS_BUCKET') . '.s3.amazonaws.com/', '', $request->user()->avatar);
+                    $oldName = str_replace('https://' . env('AWS_BUCKET') . '.s3.' . env('AWS_REGION') . '.amazonaws.com/', '', $request->user()->avatar);
                     $s3->deleteObject([
                         'Bucket' => env('AWS_BUCKET'),
-                        'Key'    => $oldName
+                        'Key' => $oldName
                     ]);
                 }
 
