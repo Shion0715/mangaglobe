@@ -18,9 +18,9 @@ class EpisodeController extends Controller
     {
         $sort = $request->query('sort');
 
-        $post = Post::find($request->post); // Add this line
+        $post = Post::find($request->post);
 
-        $episodes = Episode::query();
+        $episodes = Episode::where('post_id', $post->id);
 
         if ($sort == 'new') {
             $episodes->orderByDesc('created_at');
@@ -30,7 +30,7 @@ class EpisodeController extends Controller
 
         $episodes = $episodes->get();
 
-        return view('episode.index', compact('episodes', 'post')); // Pass $post to the view
+        return view('episode.index', compact('episodes', 'post'));
     }
 
     public function create(Post $post)
