@@ -14,6 +14,25 @@ use Illuminate\Validation\Rule;
 
 class EpisodeController extends Controller
 {
+    public function index(Request $request)
+    {
+        $sort = $request->query('sort');
+
+        $post = Post::find($request->post); // Add this line
+
+        $episodes = Episode::query();
+
+        if ($sort == 'new') {
+            $episodes->orderByDesc('created_at');
+        } elseif ($sort == 'old') {
+            $episodes->orderBy('created_at');
+        }
+
+        $episodes = $episodes->get();
+
+        return view('episode.index', compact('episodes', 'post')); // Pass $post to the view
+    }
+
     public function create(Post $post)
     {
         $latestEpisodeNumber = Episode::where('post_id', $post->id)->max('number') ?? 0;

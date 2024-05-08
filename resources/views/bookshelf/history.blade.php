@@ -28,29 +28,31 @@
         <x-bookshelf-sidebar />
 
         <!-- メインコンテンツ -->
-        <div class="w-full mb-10 px-4 sm:px-6 lg:px-8">
-            <div class="mx-0 sm:p-8">
-                <div class="mt-4">
-                    <div class="container">
-                        <div class="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                            @foreach ($posts as $post)
-                            <div class="flex flex-col item-center mt-1 m-3 mx-auto">
-                                <!-- cover image -->
-                                <a href="{{route('post.show', $post)}}">
-                                    <img src="{{$post->cover_image}}" style="height:auto; width: 200px;">
-                                </a>
-                                <!-- タイトル -->
-                                <h1 class="text-lg text-gray-700 font-semibold hover:underline cursor-pointer float-left ranking-post-title">
-                                    <a href="{{route('post.show', $post)}}">{{$post->title}}</a>
-                                </h1>
-                                <!-- 名前 -->
-                                <h1 class="text-lg text-gray-700 font-nomal hover:underline cursor-pointer float-left ranking-post-name ranking-user-name">
-                                    <a href="{{route('auther.index',  ['user' => $post->user->id])}}">{{ $post->user->name }}</a>
-                                </h1>
+        <div class="max-w-full mx-auto flex">
+        <div class="m-2 sm:py-8">
+            <div class="mt-4 mx-2">
+                <div class="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-5 xl:gap-20">
+                    @foreach ($posts as $index => $post)
+                    <div class="flex flex-col item-center mt-1 m-3 mx-auto">
+                        <a href="{{ route('post.show', $post) }}">
+                            <img src="{{ $post->cover_image }}" class="" style="height:auto; width:160px">
+                        </a>
+                        <!-- タイトル -->
+                        <h1 class="text-lg text-gray-700 font-semibold hover:underline cursor-pointer float-left bookshelf-post-title">
+                            <a href="{{ route('post.show', $post) }}">{{ $post->title }}</a>
+                        </h1>
+                        <div class="flex mt-3">
+                            <!-- アバター -->
+                            <div class="w-6 h-6 sm:w-9 sm:h-9 overflow-hidden">
+                                <img id="avatar_preview" src="{{ $post->user->avatar ? $post->user->avatar : 'https://mangaglobe-bucket.s3.amazonaws.com/avatar/user_default.jpg' }}" class="object-contain">
                             </div>
-                            @endforeach
+                            <!-- 名前 -->
+                            <h1 class="text-lg text-gray-700 font-normal hover:underline ml-2 sm:mt-2 bookshelf-user-name">
+                                <a href="{{ route('auther.index', ['user' => $post->user->id]) }}">{{ $post->user->name }}</a>
+                            </h1>
                         </div>
                     </div>
+                    @endforeach
                 </div>
             </div>
         </div>

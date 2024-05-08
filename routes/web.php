@@ -74,8 +74,14 @@ Route::middleware(['verified'])->group(function () {
     Route::delete('post/comment/{comment}', [CommentController::class, 'destroy'])->name('comment.destroy');
 });
 
+// post
 Route::get('/', [PostController::class, 'index'])->name('post.index');
 Route::get('/post/{post}', [PostController::class, 'show'])->name('post.show');
+
+// eposode表示
+Route::get('/post/{post}/chapter/{number}', [EpisodeController::class, 'show'])->name('episode.show');
+Route::get('/post/{post}/navigate/{number}', [EpisodeController::class, 'navigate'])->name('episode.navigate');
+Route::get('/post/{post}/chapter', [EpisodeController::class, 'index'])->name('episode.index');
 
 // 検索
 Route::get('/search', [SearchController::class, 'search'])->name('search');
@@ -90,12 +96,6 @@ Route::get('ranking/all', [RankingContoller::class, 'ranking_all'])->name('ranki
 Route::get('/filter', [FilterController::class, 'filter'])->name('filter');
 Route::get('/filter/result', [FilterController::class, 'filter_result'])->name('filter.result');
 Route::get('/filter/other', [FilterController::class, 'filter_other'])->name('filter.other');
-
-Route::get('/genre', [SearchController::class, 'genre'])->name('genre');
-
-// eposode表示
-Route::get('/post/{post}/chapter/{number}', [EpisodeController::class, 'show'])->name('episode.show');
-Route::get('/post/{post}/navigate/{number}', [EpisodeController::class, 'navigate'])->name('episode.navigate');
 
 // 作者表示
 Route::get('/user/{user}', [AuthorController::class, 'index'])->name('auther.index');

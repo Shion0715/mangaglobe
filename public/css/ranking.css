@@ -42,7 +42,7 @@
 
 @media (max-width: 640px) {
     .ranking-post-title {
-        max-width: 6em; /* 9chを適切なem値に変更 */
+        max-width: 5.7em;
     }
 }
 

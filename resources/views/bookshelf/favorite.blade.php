@@ -5,7 +5,7 @@
             <div class="relative inline-block text-left sm:hidden">
                 <div>
                     <button type="button" class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500" id="options-menu" aria-haspopup="true" aria-expanded="false">
-                        Favorite
+                        History
                         <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                         </svg>
@@ -28,31 +28,37 @@
         <x-bookshelf-sidebar />
 
         <!-- メインコンテンツ -->
-        <div class="w-full mb-10 px-4 sm:px-6 lg:px-8">
-            <div class="mx-0 sm:p-8">
-                <div class="mt-4">
-                    <div class="container">
-                        <div class="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                            @foreach ($likes as $like)
-                            <div class="flex flex-col item-center mt-1 m-3 mx-auto">
-                                <!-- cover image -->
-                                <a href="{{route('post.show', $like->post)}}">
-                                    <img src="{{$like->post->cover_image}}" style="height:auto; width: 200px;">
-                                </a>
-                                <!-- タイトル -->
-                                <h1 class="text-lg text-gray-700 font-semibold hover:underline cursor-pointer float-left ranking-post-title">
-                                    <a href="{{route('post.show', $like->post)}}">{{$like->post->title}}</a>
-                                </h1>
+        <div class="max-w-full mx-auto flex">
+            <div class="m-2 sm:py-8">
+                <div class="mt-4 mx-2">
+                    <div class="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-5 xl:gap-20">
+                        @foreach ($likes as $like)
+                        <div class="flex flex-col item-center mt-1 m-3 mx-auto">
+                        @if($like->post)
+                            <a href="{{ route('post.show', $like->post) }}">
+                                <img src="{{ $like->post->cover_image }}" class="" style="height:auto; width:160px">
+                            </a>
+                            <!-- タイトル -->
+                            <h1 class="text-lg text-gray-700 font-semibold hover:underline cursor-pointer float-left bookshelf-post-title">
+                                <a href="{{ route('post.show', $like->post) }}">{{ $like->post->title }}</a>
+                            </h1>
+                            @endif
+                            @if($like->post && $like->post->user)
+                            <div class="flex mt-3">
+                                <!-- アバター -->
+                                <div class="w-6 h-6 sm:w-9 sm:h-9 overflow-hidden">
+                                    <img id="avatar_preview" src="{{ $like->post->user->avatar ? $like->post->user->avatar : 'https://mangaglobe-bucket.s3.amazonaws.com/avatar/user_default.jpg' }}" class="object-contain">
+                                </div>
                                 <!-- 名前 -->
-                                <h1 class="text-lg text-gray-700 font-nomal hover:underline cursor-pointer float-left ranking-post-name">
-                                    <a href="{{route('auther.index',  ['user' => $like->post->user->id])}}">{{ $like->post->user->name }}</a>
+                                <h1 class="text-lg text-gray-700 font-normal hover:underline ml-2 sm:mt-2 bookshelf-user-name">
+                                    <a href="{{ route('auther.index', ['user' => $like->post->user->id]) }}">{{ $like->post->user->name }}</a>
                                 </h1>
                             </div>
-                            @endforeach
+                            @endif
                         </div>
+                        @endforeach
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 </x-app-layout>

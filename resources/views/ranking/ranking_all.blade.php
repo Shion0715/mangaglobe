@@ -8,7 +8,7 @@
     <x-ranking-header />
 
     <div class="max-w-full mx-auto mb-10 px-4 sm:px-6 lg:px-8">
-        <div class="mx-0">
+
             <div class="mt-4">
                 <div class="container">
                     <div class="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-4">

@@ -3,10 +3,6 @@
         <h2 class="ml-2 font-semibold text-xl text-gray-800 leading-tight">
             Post New Manga
         </h2>
-
-        <!-- validation追加 -->
-
-        <x-message :message="session('message')" />
     </x-slot>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -137,14 +133,16 @@
                 </div>
 
                 <div class="w-full flex flex-col mt-10">
-                    <div class="flex items-center">
-                        <input id="terms" type="checkbox" name="terms" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                        <label for="terms" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300 flex flex-row">
+                    <div class="flex items-center overflow-auto">
+                        <label for="terms" class="text-sm font-medium text-gray-900 dark:text-gray-300 flex flex-row items-center">
+                            <input id="terms" type="checkbox" name="terms" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                             I agree to the
+                        </label>
+                        <div class="ml-2 flex flex-col sm:flex-row">
                             <a href="/terms" target="_blank" class="text-blue-500 ml-2">Terms of Service</a>
                             <a href="/copyright" target="_blank" class="text-blue-500 ml-2">Copyright Policy</a>
                             <a href="/content" target="_blank" class="text-blue-500 ml-2">Content Guidelines</a>
-                        </label>
+                        </div>
                         @error('terms')
                         <p class="text-red-500 font-semibold leading-none">&nbsp;{{ $message }}</p>
                         @enderror

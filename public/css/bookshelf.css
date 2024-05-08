@@ -1,0 +1,38 @@
+.bookshelf-post-title {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 0.5em;
+    height: 3.0em; /* 2行の高さ */
+    word-wrap: break-word; /* 単語が要素の幅を超える場合に単語を改行 */
+}
+
+@media (max-width: 640px) {
+    .bookshelf-post-title {
+        max-width: 105px;
+    }
+}
+
+@media (min-width: 641px) {
+    .bookshelf-post-title {
+        max-width: 150px; /* 18chを適切なem値に変更 */
+    }
+}
+
+.bookshelf-user-name {
+    max-width: 75px;
+    /* 適切な幅に調整 */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+@media (min-width: 640px) {
+
+    .bookshelf-user-name {
+        max-width: 113px;
+        /* PC版の幅に調整 */
+    }
+}

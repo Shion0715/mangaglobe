@@ -14,7 +14,7 @@
                         <div class="border rounded-lg p-3 flex flex-col justify-between">
                             <img src="{{ $episode->cover_image }}" alt="Episode Cover Image" class="w-28 h-auto object-cover mb-4 mx-auto">
                             <div>
-                                <h3 class="font-semibold text-lg">{{ $episode->title }}</h3>
+                                <h3 class="font-semibold text-lg break-words">{{ $episode->title }}</h3>
                                 <p class="text-gray-500">Chapter: {{ $episode->number }}</p>
                                 <p>{{ $episode->description }}</p>
                             </div>

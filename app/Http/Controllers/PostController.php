@@ -170,7 +170,7 @@ class PostController extends Controller
         $epImage = EpImage::all();
         $episodes = Episode::where('post_id', $post->id)
             ->orderBy('number', 'asc')
-            ->paginate(8);
+            ->paginate(6);
 
         $comments = Comment::where('post_id', $post->id)->orderBy('created_at', 'desc')->take(5)->get();
 

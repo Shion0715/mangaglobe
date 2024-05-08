@@ -19,7 +19,19 @@
         /* *ここまで **/
 
         $(function() {
-            $("title,h1").text(title);
+            var maxLength = 15; // ここで最大の文字数を設定します
+
+            function splitTitle(title, maxLength) {
+                var parts = [];
+                while (title.length > 0) {
+                    parts.push(title.substring(0, maxLength));
+                    title = title.substring(maxLength);
+                }
+                return parts.join("<br>");
+            }
+
+            var titleWithBreaks = splitTitle(title, maxLength);
+            $("title,h1").html(titleWithBreaks);
             $(".o_button").attr("onClick", "location.href='" + site + "'");
             $(".copy").text(copy);
             @php
@@ -65,7 +77,6 @@
                 <h1></h1>
                 <small>Copyright &copy; <span class="copy"></span> All Rights Reserved</small>
                 <!-- 最終ページにボタンを追加する場合は以下をコメントアウト解除して編集 -->
-
                 <p>
                     <!-- 前のエピソードへのリンク -->
                     @if($episode->number > 1)

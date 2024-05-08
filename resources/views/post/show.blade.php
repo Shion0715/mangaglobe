@@ -67,17 +67,17 @@
                 <h2 class="text-2xl font-bold">Chapter <span class="text-sm">(Total Chapters: {{ $totalEpisodes }})</span></h2>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-9">
                 @forelse ($episodes as $index => $episode)
                 <div class="flex sm:flex-col episode-container">
-                    <div class="flex">
+                    <div class="flex break-words">
                         <!-- カバー -->
-                        <a href="{{ route('episode.show', ['post' => $post->id, 'number' => $episode->number ]) }}">
+                        <a href="{{ route('episode.show', ['post' => $post->id, 'number' => $episode->number ]) }}" class="flex-shrink-0">
                             <img src="{{$episode->cover_image}}" class="w-32 h-40 sm:w-auto object-contain mb-3">
                         </a>
-                        <div class="flex-col ml-6">
+                        <div class="flex-col ml-3">
                             <!-- 話数 -->
-                            <p class="text-sm text-gray-500 mt-1">chapter{{ $episode->number }}</p>
+                            <p class="text-sm text-gray-500">chapter{{ $episode->number }}</p>
                             <!-- タイトル -->
                             <h1 class="text-lg text-gray-700 font-semibold hover:underline cursor-pointer" style="word-wrap: break-word; max-width: 190px;">
                                 <a href="{{ route('episode.show', ['post' => $post->id, 'number' => $episode->number ]) }}">{{ $episode->title }}</a>
@@ -95,9 +95,10 @@
                 </p>
                 @endforelse
             </div>
-            <!-- ページネーションリンクを追加 -->
-            <div class="mt-10">
-                {{ $episodes->links() }}
+            <div class="mt-4 flex justify-end">
+                <a href="{{ route('episode.index', $post) }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    View All Chapters
+                </a>
             </div>
         </div>
 
