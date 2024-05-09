@@ -6,18 +6,13 @@ use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\Comment;
 use App\Models\Episode;
-use App\Models\User;
-use App\Models\Like;
 use App\Models\EpImage;
 use App\Models\Tag;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Aws\S3\S3Client;
-
 use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
-use PhpParser\Node\Expr\New_;
 use Google\Cloud\Storage\StorageClient;
+use Google\Client;
+use Google\Service\AnalyticsData;
 
 class PostController extends Controller
 {

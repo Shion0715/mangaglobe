@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "mangaglobe",
+  "private_key_id": "ae0ac283b1da4595450b92d0aca3242f9fc018d2",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCk1K65Ru8dJj2r\n7J0vIRrzAV96PlbLXtxe4AJ6y8+tPJSQvBHmEMfNKeyxOqohI7StW8vrvmLB+Qjj\nWKA+vargZVbGEUbzRfspLJeUe4cmoYZr15UXaxCpMHTd49z0qvo2Ofcu199nSdCG\nMuqYgLTY2tf0OXF+FVLqmJm/D1GvJXpbIyYKzUfQbQMAKd5ALKwUON0SXDvMsGSC\n2Zojqj8FKhRCsOTA/Yy7BbNE6rRy4e32psfRVvN1uI7eOYtirvNSISma3Ip7HDGe\nCPzghCYI6YYZmDZfB+GTBKRPeDZMZ5B5qyq0HRtLfgLfNDhwSRVBY8oO3V6Wqnmf\nCbyT840PAgMBAAECggEAPVLtcHweERO9pR2iezrPWnJ70bCovQAdb+Tat1HlgZfE\n1DZMWHKMy11aNLPVQQAWQ9sfuqT5/B3Jez/pWn5ZOSQqzQT3hyHVqENxX6o3pZ05\ntBygWPaZ28Bt8nHIrnSAI7WcK57f/H8faBZAZp2X6wg8iR3oBhcr4qEErmsmIklv\nndTISFQ/9JZS0RtC0iU30VjdT6oEQfRTmU9yFXMoi5Y1bGF5HMoD0/xnVHBLRg6I\nUyGRyM6G3SNd/vWsUUgfNE8FQ73vHqFp/llgjOCMCJGys1mKOf12daTf6HO/xSAd\nSgHAXSCGinL1C4eg8XsGpqpAejLEGd0kw3TYXPYRzQKBgQDauoHuk953woQaTszS\nQ8EJYKYrgZJu+VcTxCUubyFIhU3tMTD6Sm7XcMYX25nV/fTI/yfBISMPGkPnKFq+\nmRh4QNs0CZHkYL3t8wt87VSq/mC9xPOh5wxLWcsdZ/ep4tH1RZz+6qF5I2sxgG0p\nePnJ+A+NvLlQsUKiMzAKR1X2jQKBgQDA6wTCeCaDkYLBtvwrlFnEHWo2Nr9wJfTu\nQ9dSVa0eDZkqsI93KBw/ml3Pcp9L+LtU4Pc6h7Fo5iui1y7UBZ+m7IXzsM76iF/n\n+tAR+4VbCbfafR2EBsLetF4t+g2FTOrMew6CJTTO88QOokwFtbHJdc4kUz2fTM5F\niuFIvbMJCwKBgGIxKlVdYpjm5QEecQrPyeAY2GBdmcxh+TpxarOuxgVVesdJtxAV\nzC7BfNyHBEex62s0SLeF1cRY6TTjw+Eev4J0szNoPGuHFpy06Gpb7Q+ahPmMakc7\nfyRwmiOIYgGNRu5SIwm5cWX9hYjCe78LhS+rQehCWfskqKJCUoW6wpedAoGBAKJl\nNByAB+u5Edj/sEb/GpF8MWxxqbU+PnBTq24jsRcbW1QUTLCBk0X3LAD0/CN3vjo1\nJeifUTh8iT8K5OCV208oy5nXvGQpaJJfD8gTcq6v/5RsvevlxSSzsJQDal5L4VtA\nO3ZS26Faki+/bz9fM8ni4SSy7ayrevgPcJVLGusBAoGBAI/eeoIRlcdf6MzI0v7r\n8Ul1PS3nDpldzzWNXk8NeYKVXpV7jsgoqkapRpl7PBqsqgnVhzsDEwDOeFrxH+Qz\no6Hx+7vhPZG5i7Kw+TmU0OsXuxeyMKq+BOKJcpATRLltnwTDBW61DE6HZlTE8+If\nGzo7DFU6MCVqXSyzjq45G7VA\n-----END PRIVATE KEY-----\n",
+  "client_email": "mangaglobe-api-rep@mangaglobe.iam.gserviceaccount.com",
+  "client_id": "116679284473376199983",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/mangaglobe-api-rep%40mangaglobe.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

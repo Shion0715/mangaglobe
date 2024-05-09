@@ -35,7 +35,7 @@
             $(".o_button").attr("onClick", "location.href='" + site + "'");
             $(".copy").text(copy);
             @php
-            $sorted_ep_images = $ep_images -> sortBy('number');
+            $sorted_ep_images = $ep_images - > sortBy('number');
             @endphp
 
             @foreach($sorted_ep_images as $ep_image)
@@ -59,6 +59,14 @@
         gtag('js', new Date());
 
         gtag('config', 'G-JL7M7D7P36');
+    </script>
+
+    <script>
+        gtag('event', 'view_episode', {
+            "event_category": "Episode Views",
+            "event_label": "Post ID: {{ $episode->post_id }}, Episode ID: {{ $episode->id }}",
+            "value": 1
+        });
     </script>
 </head>
 

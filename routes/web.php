@@ -16,7 +16,7 @@ use App\Http\Controllers\CashController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\WorksController;
 use App\Http\Controllers\FooterController;
-use App\Models\Episode;
+use App\Http\Controllers\RankingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -110,6 +110,8 @@ Route::get('/post/{post}/comment', [CommentController::class, 'show'])->name('co
 // Contact
 Route::get('contact/create', [ContactController::class, 'create'])->name('contact.create');
 Route::post('contact/store', [ContactController::class, 'store'])->name('contact.store');
+
+Route::get('ranking', [RankingController::class, 'index'])->name('ranking.index');
 
 // footer
 Route::get('report', [FooterController::class, 'report_create'])->name('report_create');

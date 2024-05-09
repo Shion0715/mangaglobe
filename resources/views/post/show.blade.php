@@ -28,7 +28,7 @@
                         <!-- ビュー数 -->
                         <div>
                             <i class="fa-eye text-gray-500 fas"></i>
-                            <span class="text-gray-500">{{ $post->views_count }}</span>
+                            <span class="text-gray-500"></span>
                         </div>
                     </div>
                     <!-- 作者 -->
