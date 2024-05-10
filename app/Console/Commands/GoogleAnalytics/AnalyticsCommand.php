@@ -71,7 +71,7 @@ class AnalyticsCommand extends Command
                         'field_name'    => 'pagePath',
                         'string_filter' => new Filter\StringFilter([
                             'match_type' => MatchType::PARTIAL_REGEXP,
-                            'value'      => '^/post/',
+                            'value' => '^/post/\d+/chapter/\d+$',
                         ]),
                     ]),
                 ]),

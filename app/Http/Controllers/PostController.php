@@ -153,7 +153,6 @@ class PostController extends Controller
             $post->isLiked = $post->likes->contains('user_id', auth()->id());
             return $post;
         });
-
         $totalEpisodes = $post->episodes->count();
 
         // 特定の投稿に対しても「いいね」の状態を設定
@@ -165,10 +164,27 @@ class PostController extends Controller
         $episodes = Episode::where('post_id', $post->id)
             ->orderBy('number', 'asc')
             ->paginate(6);
-        $comments = Comment::where('post_id', $post->id)->orderBy('created_at', 'desc')->take(5)->get();
+        $comments = Comment::where('post_id', $post->id)
+            ->orderBy('created_at', 'desc')
+            ->take(5)
+            ->get();
+
+        $totalPageViewCount = PostRanking::sum('page_view_count');
 
         // ランキングデータを取得
-        $ranking = PostRanking::where('page', '/post/' . $post->id)->first();
+        $postTotalPageViewCount = PostRanking::where('page', 'LIKE', '/post/' . $post->id . '/chapter/%')
+            ->sum('page_view_count');
+
+            
+        $chapterPageViewCounts = PostRanking::where('page', 'LIKE', '/post/' . $post->id . '/chapter/%')
+            ->get()
+            ->groupBy(function ($item) {
+                return explode('/', $item->page)[4]; // chapterの番号を取得
+            })
+            ->map(function ($group) {
+                return $group->sum('page_view_count');
+            });
+
 
         return view('post.show', compact(
             'posts',
@@ -179,7 +195,9 @@ class PostController extends Controller
             'tags',
             'comments',
             'totalEpisodes',
-            'ranking' // ランキングデータを追加
+            'totalPageViewCount',
+            'postTotalPageViewCount',
+            'chapterPageViewCounts',
         ));
     }
 

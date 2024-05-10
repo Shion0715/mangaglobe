@@ -36,7 +36,7 @@ class CommentController extends Controller
         ]);
 
         $inputs = request()->validate([
-            'body' => 'required|max:1000',
+            'body' => 'required|max:500',
         ]);
 
         $comment = Comment::create([

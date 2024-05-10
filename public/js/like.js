@@ -17,7 +17,7 @@ $(document).ready(function () {
                     likeCount.addClass('text-red-500').text(response.likes_count);
                 }.bind(this),
                 error: function (xhr) {
-                    alert('You need to log in.');
+                    alert('You need to log in and verify Email.');
                 }
             });
         } else {
@@ -33,7 +33,7 @@ $(document).ready(function () {
                     likeCount.removeClass('text-red-500').text(response.likes_count);
                 }.bind(this),
                 error: function (xhr) {
-                    alert('You need to log in.');
+                    alert('You need to log in and verify Email.');
                 }
             });
         }

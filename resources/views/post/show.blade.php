@@ -19,7 +19,6 @@
                     </p>
                     <div class="flex">
                         <!-- いいねボタン -->
-                        ログインとverify
                         <div class="mr-3">
                             <i class="like-btn fa-heart {{ $post->isLikedBy(Auth::user()) ? 'text-red-500 fas' : 'text-gray-500 far' }}" data-postid="{{ $post->id }}"></i>
                             <span class="{{ $post->isLikedBy(Auth::user()) ? 'text-red-500' : 'text-gray-500' }}">{{ $post->likes()->count() }}</span>
@@ -29,9 +28,7 @@
                         <!-- ビュー数 -->
                         <div>
                             <i class="fa-eye text-gray-500 fas"></i>
-                            @if ($ranking)
-                            <span class="text-gray-500">{{$ranking->page_view_count}}</span>
-                            @endif
+                            <span class="text-gray-500">{{ $postTotalPageViewCount }}</span>
                         </div>
                     </div>
                     <!-- 作者 -->
@@ -56,7 +53,6 @@
                         @endforeach
                     </p>
                     <!-- ボディ -->
-
                     <p class="mr-4 mt-4 break-words">
                         <span class="text-sm text-gray-500 mr-2">Story</span>
                         <span id="moreText" class="md:inline lg:inline">{{ $post->body }}</span>
@@ -85,17 +81,19 @@
                             <h1 class="text-lg text-gray-700 font-semibold hover:underline cursor-pointer" style="word-wrap: break-word; max-width: 190px;">
                                 <a href="{{ route('episode.show', ['post' => $post->id, 'number' => $episode->number ]) }}">{{ $episode->title }}</a>
                             </h1>
-                            <h2 class="text-sm text-gray-800 mt-3">
-                                {{ $episode->created_at->format('Y-m-d')}}
-                            </h2>
+                            <h2 class="text-sm text-gray-800 mt-3">{{ $episode->created_at->format('Y-m-d') }}</h2>
                             <!-- アクセス数 -->
+                            <div>
+                                @if (isset($chapterPageViewCounts[$episode->number]))
+                                <i class="fa-eye text-gray-500 fas"></i>
+                                <span class="text-gray-500">{{ $chapterPageViewCounts[$episode->number] }}</span>
+                                @endif
+                            </div>
                         </div>
                     </div>
                 </div>
                 @empty
-                <p>
-                    No chapter found
-                </p>
+                <p>No chapter found</p>
                 @endforelse
             </div>
             <div class="mt-4 flex justify-end">
@@ -137,7 +135,7 @@
                     </a>
                 </div>
 
-                @auth
+                @if (Auth::check() && Auth::user()->email_verified_at)
                 <div class="mt-6">
                     <h2 class="text-2xl font-bold">Leave a Comment</h2>
                     @if (session('message'))
@@ -165,9 +163,9 @@
                 @else
                 <div class="mt-6">
                     <h2 class="text-2xl font-bold">Leave a Comment</h2>
-                    <p>You need to <a href="{{ route('login') }}" class="text-indigo-600 hover:text-indigo-500">log in</a> to post comments.</p>
+                    <p>You need to <a href="{{ route('login') }}" class="text-indigo-600 hover:text-indigo-500">log in and verify Email</a> to post comments.</p>
                 </div>
-                @endauth
+                @endif
                 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
                 <script>
                     $(document).ready(function() {
