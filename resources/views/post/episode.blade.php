@@ -6,7 +6,7 @@
     <title></title>
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
     <meta name="google-adsense-account" content="ca-pub-2670996155864588">
-    
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.css" rel="stylesheet">
     <link href="{{ asset('downloads/images/style.css') }}" rel="stylesheet">
     <link href="{{ asset('downloads/comi_style.css') }}" rel="stylesheet">
@@ -50,6 +50,7 @@
         });
     </script>
 
+    @if (App::environment('production'))
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-JL7M7D7P36"></script>
     <script>
@@ -62,6 +63,7 @@
 
         gtag('config', 'G-JL7M7D7P36');
     </script>
+    @endif
 
     <script>
         gtag('event', 'view_episode', {

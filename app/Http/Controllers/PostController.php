@@ -169,8 +169,6 @@ class PostController extends Controller
             ->take(5)
             ->get();
 
-        $totalPageViewCount = PostRanking::sum('page_view_count');
-
         // ランキングデータを取得
         $postTotalPageViewCount = PostRanking::where('page', 'LIKE', '/post/' . $post->id . '/chapter/%')
             ->sum('page_view_count');
@@ -195,7 +193,6 @@ class PostController extends Controller
             'tags',
             'comments',
             'totalEpisodes',
-            'totalPageViewCount',
             'postTotalPageViewCount',
             'chapterPageViewCounts',
         ));

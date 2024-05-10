@@ -56,12 +56,17 @@
                         </a>
                         <div class="flex">
                             <!-- いいねボタン -->
-                            <i class="like-btn fa-heart mt-1 {{ $post->isLikedBy(Auth::user()) ? 'text-red-500 fas' : 'text-gray-500 far' }}" data-postid="{{ $post->id }}"></i>
-                            <span class="{{ $post->isLikedBy(Auth::user()) ? 'text-red-500' : 'text-gray-500' }}">{{ $post->likes()->count() }}</span>
-                            <!-- ビュー数 -->
-                            <i class="fa-eye ml-3 mt-1 text-gray-500 fas"></i>
+                            <!-- <div class="mr-3">
+                                <i class="like-btn fa-heart {{ $post->isLikedBy(Auth::user()) ? 'text-red-500 fas' : 'text-gray-500 far' }}" data-postid="{{ $post->id }}"></i>
+                                <span class="{{ $post->isLikedBy(Auth::user()) ? 'text-red-500' : 'text-gray-500' }}">{{ $post->likes()->count() }}</span>
+                            </div>
                             <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-                            <script src="{{ asset('js/like.js') }}"></script>
+                            <script src="{{ asset('js/like.js') }}"></script> -->
+                            <!-- ビュー数 -->
+                            <!-- <div>
+                                <i class="fa-eye text-gray-500 fas"></i>
+                                <span class="text-gray-500">{{ $postTotalPageViewCount }}</span>
+                            </div> -->
                         </div>
                         <!-- type -->
                         <a class="" href="{{ route('post.show', $post) }}">

@@ -84,10 +84,12 @@
                             <h2 class="text-sm text-gray-800 mt-3">{{ $episode->created_at->format('Y-m-d') }}</h2>
                             <!-- アクセス数 -->
                             <div>
-                                @if (isset($chapterPageViewCounts[$episode->number]))
                                 <i class="fa-eye text-gray-500 fas"></i>
-                                <span class="text-gray-500">{{ $chapterPageViewCounts[$episode->number] }}</span>
-                                @endif
+                                @php
+                                $chapterNumber = $episode->number;
+                                $chapterViews = isset($chapterPageViewCounts[$chapterNumber]) ? $chapterPageViewCounts[$chapterNumber] : 0;
+                                @endphp
+                                <span class="text-gray-500">{{ $chapterViews }}</span>
                             </div>
                         </div>
                     </div>

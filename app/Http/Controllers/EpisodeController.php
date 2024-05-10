@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Episode;
 use App\Models\Post;
+use App\Models\PostRanking;
 use Illuminate\Support\Facades\Cookie;
 use App\Models\EpImage;
 use Illuminate\Http\Request;
@@ -30,7 +31,16 @@ class EpisodeController extends Controller
 
         $episodes = $episodes->get();
 
-        return view('episode.index', compact('episodes', 'post'));
+        $chapterPageViewCounts = PostRanking::where('page', 'LIKE', '/post/' . $post->id . '/chapter/%')
+            ->get()
+            ->groupBy(function ($item) {
+                return explode('/', $item->page)[4]; // chapterの番号を取得
+            })
+            ->map(function ($group) {
+                return $group->sum('page_view_count');
+            });
+
+        return view('episode.index', compact('episodes', 'post', 'chapterPageViewCounts'));
     }
 
     public function create(Post $post)

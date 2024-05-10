@@ -18,6 +18,14 @@
                         <div class="bg-gray-100 rounded-full py-1 text-xs text-gray-600">Chapter {{ $episode->number }}</div>
                         <p class="text-xs text-gray-500">{{ $episode->created_at->format('M d, Y') }}</p>
                     </div>
+                    <div>
+                        <i class="fa-eye text-gray-500 fas"></i>
+                        @php
+                        $chapterNumber = $episode->number;
+                        $chapterViews = isset($chapterPageViewCounts[$chapterNumber]) ? $chapterPageViewCounts[$chapterNumber] : 0;
+                        @endphp
+                        <span class="text-gray-500">{{ $chapterViews }}</span>
+                    </div>
                     <h3 class="text-sm font-medium text-gray-900 mt-1 break-words">
                         <a href="{{ route('episode.show', ['post' => $post->id, 'number' => $episode->number ]) }}">
                             <span aria-hidden="true" class="absolute inset-0"></span>

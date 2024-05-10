@@ -24,7 +24,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
-    
+
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -32,6 +32,7 @@
     <script src="{{ asset('js/show.js') }}"></script>
     <script src="{{ asset('js/responsive_dropdown.js') }}"></script>
 
+    @if (App::environment('production'))
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-JL7M7D7P36"></script>
     <script>
@@ -44,6 +45,7 @@
 
         gtag('config', 'G-JL7M7D7P36');
     </script>
+    @endif
 </head>
 
 <body class="font-sans antialiased bg-gray-100">
