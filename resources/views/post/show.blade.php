@@ -19,6 +19,7 @@
                     </p>
                     <div class="flex">
                         <!-- いいねボタン -->
+                        ログインとverify
                         <div class="mr-3">
                             <i class="like-btn fa-heart {{ $post->isLikedBy(Auth::user()) ? 'text-red-500 fas' : 'text-gray-500 far' }}" data-postid="{{ $post->id }}"></i>
                             <span class="{{ $post->isLikedBy(Auth::user()) ? 'text-red-500' : 'text-gray-500' }}">{{ $post->likes()->count() }}</span>
@@ -28,7 +29,9 @@
                         <!-- ビュー数 -->
                         <div>
                             <i class="fa-eye text-gray-500 fas"></i>
-                            <span class="text-gray-500"></span>
+                            @if ($ranking)
+                            <span class="text-gray-500">{{$ranking->page_view_count}}</span>
+                            @endif
                         </div>
                     </div>
                     <!-- 作者 -->

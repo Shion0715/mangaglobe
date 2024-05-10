@@ -11,8 +11,7 @@ use App\Models\Tag;
 use Aws\S3\S3Client;
 use Carbon\Carbon;
 use Google\Cloud\Storage\StorageClient;
-use Google\Client;
-use Google\Service\AnalyticsData;
+use App\Models\PostRanking;
 
 class PostController extends Controller
 {
@@ -166,10 +165,22 @@ class PostController extends Controller
         $episodes = Episode::where('post_id', $post->id)
             ->orderBy('number', 'asc')
             ->paginate(6);
-
         $comments = Comment::where('post_id', $post->id)->orderBy('created_at', 'desc')->take(5)->get();
 
-        return view('post.show', compact('posts', 'post', 'episodes', 'epImage', 'user', 'tags', 'comments', 'totalEpisodes'));
+        // ランキングデータを取得
+        $ranking = PostRanking::where('page', '/post/' . $post->id)->first();
+
+        return view('post.show', compact(
+            'posts',
+            'post',
+            'episodes',
+            'epImage',
+            'user',
+            'tags',
+            'comments',
+            'totalEpisodes',
+            'ranking' // ランキングデータを追加
+        ));
     }
 
 

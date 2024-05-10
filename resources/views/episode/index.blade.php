@@ -7,17 +7,6 @@
 
     <div class="max-w-2xl mx-auto py-8 px-2 sm:py-16 sm:px-4 lg:max-w-6xl lg:px-6">
 
-        <div class="mb-4">
-            <form method="GET" action="{{ route('episode.index', ['post' => $post->id]) }}">
-                <div class="form-group">
-                    <select class="form-control" name="sort" onchange="this.form.submit()">
-                        <option value="new" {{ request('sort') == 'new' ? 'selected' : '' }}>Newest</option>
-                        <option value="old" {{ request('sort') == 'old' || old('sort') == null ? 'selected' : '' }}>Oldest</option>
-                    </select>
-                </div>
-            </form>
-        </div>
-
         <div class="mx-2 mt-4 grid grid-cols-2 gap-y-6 gap-x-8 md:grid-cols-3 lg:grid-cols-5 xl:gap-x-10">
             @forelse ($episodes as $episode)
             <div class="group relative">

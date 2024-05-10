@@ -111,8 +111,6 @@ Route::get('/post/{post}/comment', [CommentController::class, 'show'])->name('co
 Route::get('contact/create', [ContactController::class, 'create'])->name('contact.create');
 Route::post('contact/store', [ContactController::class, 'store'])->name('contact.store');
 
-Route::get('ranking', [RankingController::class, 'index'])->name('ranking.index');
-
 // footer
 Route::get('report', [FooterController::class, 'report_create'])->name('report_create');
 Route::post('report/issue', [FooterController::class, 'report_store'])->name('report.store');

@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <title></title>
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+    <meta name="google-adsense-account" content="ca-pub-2670996155864588">
+    
     <link href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.css" rel="stylesheet">
     <link href="{{ asset('downloads/images/style.css') }}" rel="stylesheet">
     <link href="{{ asset('downloads/comi_style.css') }}" rel="stylesheet">
@@ -35,7 +37,7 @@
             $(".o_button").attr("onClick", "location.href='" + site + "'");
             $(".copy").text(copy);
             @php
-            $sorted_ep_images = $ep_images - > sortBy('number');
+            $sorted_ep_images = $ep_images -> sortBy('number');
             @endphp
 
             @foreach($sorted_ep_images as $ep_image)
