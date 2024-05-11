@@ -28,7 +28,7 @@
                         <!-- ビュー数 -->
                         <div>
                             <i class="fa-eye text-gray-500 fas"></i>
-                            <span class="text-gray-500">{{ $postTotalPageViewCount }}</span>
+                            <span class="text-gray-500">{{ $postTotalPageViewCounts }}</span>
                         </div>
                     </div>
                     <!-- 作者 -->
@@ -87,10 +87,11 @@
                                 <i class="fa-eye text-gray-500 fas"></i>
                                 @php
                                 $chapterNumber = $episode->number;
-                                $chapterViews = isset($chapterPageViewCounts[$chapterNumber]) ? $chapterPageViewCounts[$chapterNumber] : 0;
+                                $chapterViews = $chapterPageViewCounts[$chapterNumber] ?? 0;
                                 @endphp
                                 <span class="text-gray-500">{{ $chapterViews }}</span>
                             </div>
+
                         </div>
                     </div>
                 </div>

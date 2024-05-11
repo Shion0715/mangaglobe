@@ -13,6 +13,11 @@ use Google\Analytics\Data\V1beta\OrderBy;
 use Google\Analytics\Data\V1beta\DateRange;
 use Google\Analytics\Data\V1beta\Dimension;
 use Google\Analytics\Data\V1beta\Metric;
+use App\Models\DailyViewCount;
+use App\Models\WeeklyViewCount;
+use App\Models\MonthlyViewCount;
+use App\Models\TotalViewCount;
+
 
 class AnalyticsCommand extends Command
 {
@@ -37,84 +42,69 @@ class AnalyticsCommand extends Command
     public function postRanking(): void
     {
         try {
-            // プロパティIDを入力します。.envに書くと良いと思います。
-            // $property_id = config('google.analytics.propertyId');
             $property_id = "439716669";
-
-            // 秘密鍵のパスです。ここも.envに書くと良いと思います。
-            // 'credentials' => config('google.analytics.credentials'),
             $client = new BetaAnalyticsDataClient([
                 'credentials' => "storage/json/mangaglobe-analytics-73567e70a692.json",
             ]);
 
-            $response = $client->runReport([
-                // プロパティIDを指定します。
-                'property'        => 'properties/' . $property_id,
-                // 期間を指定します。
-                'dateRanges'      => [
-                    new DateRange([
-                        'start_date' => '7daysAgo',
-                        'end_date'   => 'today',
-                    ]),
-                ],
-                // フィルタリング用にデータの属性を指定します。
-                'dimensions'      => [
-                    new Dimension([
-                        'name' => 'pagePath',
-                    ]),
-                ],
-                // データの属性で制限を掛けます。
-                // 今回は、/techblog/articles/でフィルタリングを掛けてみます。
-                'dimensionFilter' =>
-                new FilterExpression([
-                    'filter' => new Filter([
-                        'field_name'    => 'pagePath',
-                        'string_filter' => new Filter\StringFilter([
-                            'match_type' => MatchType::PARTIAL_REGEXP,
-                            'value' => '^/post/\d+/chapter/\d+$',
-                        ]),
-                    ]),
-                ]),
-                // 取得する測定値を指定します。
-                'metrics'         => [
-                    new Metric([
-                        'name' => 'screenPageViews', // PV数
-                    ]),
-                    new Metric([
-                        'name' => 'totalUsers', // 平均ページ滞在時間（秒）
-                    ]),
-                ],
-                // 取得する順番を変更します。
-                // 今回は、PV数が多い順に取ります。
-                'orderBys'        => [
-                    new OrderBy([
-                        'metric' => new OrderBy\MetricOrderBy([
-                            'metric_name' => 'screenPageViews',
-                        ]),
-                        'desc'   => true,
-                    ]),
-                ],
-            ]);
-            // 取得したReportを整形
-            $result = collect();
-            foreach ($response->getRows() as $key => $row) {
-                // ディメンション
-                $pageName = $row->getDimensionValues()[0]->getValue();
+            $dateRanges = [
+                ['today', 'today', DailyViewCount::class], // 今日のビュー数を DailyViewCount に保存
+                ['7daysAgo', 'today', WeeklyViewCount::class], // 今週のビュー数を WeeklyViewCount に保存
+                [date('Y-m-01'), 'today', MonthlyViewCount::class], // 今月のビュー数を MonthlyViewCount に保存
+                ['2024-04-01', 'today', TotalViewCount::class], // 全期間のビュー数を TotalViewCount に保存
+            ];
 
-                // メトリクス
-                $metricsValues = $row->getMetricValues();
-                $viewCount     = $metricsValues[0]->getValue(); // PV数
-                $time          = $metricsValues[1]->getValue(); // 平均ページ滞在時間（秒）
-                $result->push(['rank' => $key + 1, 'page' => $pageName, 'page_view_count' => $viewCount]);
-            }
-            if ($result->isNotEmpty()) {
-                // DBに保存
-                PostRanking::query()->delete();
-                PostRanking::upsert($result->toArray(), 'rank');
+            foreach ($dateRanges as [$startDate, $endDate, $modelClass]) {
+                $response = $client->runReport([
+                    'property'        => 'properties/' . $property_id,
+                    'dateRanges'      => [
+                        new DateRange([
+                            'start_date' => $startDate,
+                            'end_date'   => $endDate,
+                        ]),
+                    ],
+                    'dimensions'      => [
+                        new Dimension([
+                            'name' => 'pagePath',
+                        ]),
+                    ],
+                    'dimensionFilter' => new FilterExpression([
+                        'filter' => new Filter([
+                            'field_name'    => 'pagePath',
+                            'string_filter' => new Filter\StringFilter([
+                                'match_type' => MatchType::PARTIAL_REGEXP,
+                                'value'      => '^/post/\d+/chapter/\d+$',
+                            ]),
+                        ]),
+                    ]),
+                    'metrics'         => [
+                        new Metric([
+                            'name' => 'screenPageViews',
+                        ]),
+                    ],
+                    'orderBys'        => [
+                        new OrderBy([
+                            'metric' => new OrderBy\MetricOrderBy([
+                                'metric_name' => 'screenPageViews',
+                            ]),
+                            'desc'   => true,
+                        ]),
+                    ],
+                ]);
+
+                foreach ($response->getRows() as $key => $row) {
+                    $pageName = $row->getDimensionValues()[0]->getValue();
+                    $metricsValues = $row->getMetricValues();
+                    $viewCount = $metricsValues[0]->getValue();
+
+                    $modelClass::updateOrCreate(
+                        ['page_path' => $pageName],
+                        ['view_count' => $viewCount]
+                    );
+                }
             }
         } catch (Exception $e) {
             dd($e);
         }
     }
 }
-

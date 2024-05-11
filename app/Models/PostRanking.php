@@ -15,4 +15,9 @@ class PostRanking extends Model
         'rank',
         'page_view_count',
     ];
+
+    public function post()
+    {
+        return $this->belongsTo(Post::class);
+    }
 }

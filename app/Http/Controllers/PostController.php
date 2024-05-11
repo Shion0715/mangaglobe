@@ -11,7 +11,8 @@ use App\Models\Tag;
 use Aws\S3\S3Client;
 use Carbon\Carbon;
 use Google\Cloud\Storage\StorageClient;
-use App\Models\PostRanking;
+use App\Models\TotalViewCount;
+
 
 class PostController extends Controller
 {
@@ -170,18 +171,21 @@ class PostController extends Controller
             ->get();
 
         // ランキングデータを取得
-        $postTotalPageViewCount = PostRanking::where('page', 'LIKE', '/post/' . $post->id . '/chapter/%')
-            ->sum('page_view_count');
+        $postTotalPageViewCounts = TotalViewCount::where('page_path', 'LIKE', '/post/' . $post->id . '/chapter/%')
+            ->sum('view_count');
 
-            
-        $chapterPageViewCounts = PostRanking::where('page', 'LIKE', '/post/' . $post->id . '/chapter/%')
+
+        $chapterPageViewCounts = TotalViewCount::where('page_path', 'LIKE', '%/post/' . $post->id . '/chapter/%')
             ->get()
-            ->groupBy(function ($item) {
-                return explode('/', $item->page)[4]; // chapterの番号を取得
+            ->groupBy(function ($item) use ($post) {
+                $pattern = '/\/post\/' . $post->id . '\/chapter\/(\d+)/';
+                preg_match($pattern, $item->page_path, $matches);
+                return $matches[1] ?? '';
             })
             ->map(function ($group) {
-                return $group->sum('page_view_count');
+                return $group->sum('view_count');
             });
+
 
 
         return view('post.show', compact(
@@ -193,7 +197,7 @@ class PostController extends Controller
             'tags',
             'comments',
             'totalEpisodes',
-            'postTotalPageViewCount',
+            'postTotalPageViewCounts',
             'chapterPageViewCounts',
         ));
     }

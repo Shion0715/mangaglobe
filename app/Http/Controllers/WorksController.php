@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\Comment;
+use App\Models\TotalViewCount;
 
 class WorksController extends Controller
 {
@@ -29,7 +30,24 @@ class WorksController extends Controller
     {
         $user = auth()->user();
         $userId = $user->id;
+
+        // Get all posts for the authenticated user
         $posts = Post::where('user_id', $userId)->orderBy('created_at', 'desc')->get();
-        return view('workspace.mymanga', compact('posts'));
+
+        // Initialize an array to hold post-wise total page view counts
+        $postTotalPageViewCounts = [];
+
+        // Iterate over each post to calculate and store the total page view count
+        foreach ($posts as $post) {
+            $postId = $post->id;
+
+            $postTotalPageViewCount = TotalViewCount::where('page_path', 'LIKE', '/post/' . $postId . '/chapter/%')
+                ->sum('view_count');
+
+            // Store the total page view count in the array using the post ID as the key
+            $postTotalPageViewCounts[$postId] = $postTotalPageViewCount;
+        }
+
+        return view('workspace.mymanga', compact('posts', 'postTotalPageViewCounts'));
     }
 }
