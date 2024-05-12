@@ -97,9 +97,13 @@ class AnalyticsCommand extends Command
                     $metricsValues = $row->getMetricValues();
                     $viewCount = $metricsValues[0]->getValue();
 
+                    // URLからpost_idを抽出
+                    preg_match('/^\/post\/(\d+)\/chapter\/\d+$/', $pageName, $matches);
+                    $postId = $matches[1] ?? null;
+
                     $modelClass::updateOrCreate(
                         ['page_path' => $pageName],
-                        ['view_count' => $viewCount]
+                        ['view_count' => $viewCount, 'post_id' => $postId]
                     );
                 }
             }

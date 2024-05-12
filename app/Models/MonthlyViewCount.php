@@ -14,5 +14,6 @@ class MonthlyViewCount extends Model
         'view_count',
         'year',
         'month',
+        'post_id'
     ];
 }

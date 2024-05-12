@@ -71,7 +71,7 @@
                                         <i class="fas fa-heart text-red-500"></i>
                                         <span class="ml-1">{{ count($post->likes) }}</span>
                                         <i class="fas fa-eye text-blue-500 ml-4"></i>
-                                        <span class="ml-1">{{ $chapterPageViewCounts ?? 0 }}</span>
+                                        <span class="ml-1">{{ $postTotalPageViewCounts[$post->id] }}</span>
                                     </div>
                                 </div>
 

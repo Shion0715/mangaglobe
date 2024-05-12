@@ -13,5 +13,6 @@ class DailyViewCount extends Model
         'page_path',
         'view_count',
         'date',
+        'post_id'
     ];
 }

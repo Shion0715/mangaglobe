@@ -38,7 +38,7 @@
                     <div class="bg-success rounded p-4 mb-3">
                         <div class="flex items-center text-gray-800">
                             <i class="fas fa-eye mr-2"></i>
-                            <span class="text-xl">Views: {{ $user->posts->where('created_at', '>=', now()->startOfDay())->sum('views_count') }}</span>
+                            <span class="text-xl">Views: {{ $todayPageViewCount }}</span>
                         </div>
                     </div>
                 </div>
@@ -55,7 +55,7 @@
                     <div class="bg-success rounded p-4 mb-3">
                         <div class="flex items-center text-gray-800">
                             <i class="fas fa-eye mr-2"></i>
-                            <span class="text-xl">Views: {{ $user->posts->where('created_at', '>=', now()->startOfWeek())->sum('views_count') }}</span>
+                            <span class="text-xl">Views: {{ $thisWeekPageViewCount }}</span>
                         </div>
                     </div>
                 </div>
@@ -72,7 +72,7 @@
                     <div class="bg-success rounded p-4 mb-3">
                         <div class="flex items-center text-gray-800">
                             <i class="fas fa-eye mr-2"></i>
-                            <span class="text-xl">Views: {{ $user->posts->where('created_at', '>=', now()->startOfMonth())->sum('views_count') }}</span>
+                            <span class="text-xl">Views: {{ $thisMonthPageViewCount }}</span>
                         </div>
                     </div>
                 </div>
@@ -89,7 +89,7 @@
                     <div class="bg-success rounded p-4 mb-3">
                         <div class="flex items-center text-gray-800">
                             <i class="fas fa-eye mr-2"></i>
-                            <span class="text-xl">Views: {{ $user->posts->sum('views_count') }}</span>
+                            <span class="text-xl">Views: {{ $totalPageViewCount }}</span>
                         </div>
                     </div>
                 </div>

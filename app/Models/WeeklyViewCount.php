@@ -14,5 +14,6 @@ class WeeklyViewCount extends Model
         'view_count',
         'start_date',
         'end_date',
+        'post_id'
     ];
 }

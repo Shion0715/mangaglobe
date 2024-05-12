@@ -5,19 +5,26 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Post;
 use App\Models\User;
-use App\Models\PostRanking;
+use App\Models\TotalViewCount;
 
 use Illuminate\Http\Request;
 
 class AuthorController extends Controller
 {
-    public function index(Post $post, User $user)
+    public function index(Request $request, User $user)
     {
-            $posts = $user->posts()->paginate(5);
+        $posts = $user->posts()->paginate(5);
 
-            $postTotalPageViewCount = PostRanking::where('page', 'LIKE', '/post/' . $post->id . '/chapter/%')
-            ->sum('page_view_count');
+        $postId = $request->get('post_id'); // リクエストからpost_idを取得
+        $post = Post::find($postId); // post_idを使用してPostオブジェクトを取得
 
-            return view('author.author', compact('user', 'posts', 'postTotalPageViewCount'));
+        if ($post) {
+            $postTotalPageViewCount = TotalViewCount::where('post_id', $post->id)
+                ->sum('view_count');
+        } else {
+            $postTotalPageViewCount = 0; // postが見つからない場合は0を設定
+        }
+
+        return view('author.author', compact('user', 'posts', 'postTotalPageViewCount'));
     }
 }

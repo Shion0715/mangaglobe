@@ -12,5 +12,6 @@ class TotalViewCount extends Model
     protected $fillable = [
         'page_path',
         'view_count',
+        'post_id'
     ];
 }

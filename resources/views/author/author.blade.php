@@ -40,50 +40,42 @@
                     {{ $user->name }} 's Manga
                 </div>
                 @foreach ($posts as $post)
-                <div class="flex sm:flex-row mt-8">
-                    <!-- カバー -->
-                    <a class="" href="{{ route('post.show', $post) }}">
+                <a class="" href="{{ route('post.show', $post) }}">
+                    <div class="flex sm:flex-row mt-8">
+                        <!-- カバー -->
                         <div class="w-28 h-auto sm:w-48 h-auto overflow-hidden mr-8 flex-shrink-0">
                             <img src="{{ $post->cover_image }}" class="w-full h-full object-cover">
                         </div>
-                    </a>
-                    <div class="flex flex-col overflow-y-auto" style="max-height: 180px;">
-                        <!-- タイトル -->
-                        <a class="" href="{{ route('post.show', $post) }}">
+                        <div class="flex flex-col overflow-y-auto" style="max-height: 180px;">
+                            <!-- タイトル -->
                             <p class="text-2xl sm:text-3xl text-gray-700 font-bold break-all">
                                 {{ $post->title }}
                             </p>
-                        </a>
-                        <div class="flex">
-                            <!-- いいねボタン -->
-                            <!-- <div class="mr-3">
-                                <i class="like-btn fa-heart {{ $post->isLikedBy(Auth::user()) ? 'text-red-500 fas' : 'text-gray-500 far' }}" data-postid="{{ $post->id }}"></i>
-                                <span class="{{ $post->isLikedBy(Auth::user()) ? 'text-red-500' : 'text-gray-500' }}">{{ $post->likes()->count() }}</span>
+                            <div class="flex">
+                                <!-- いいねボタン -->
+                                <div class="mr-3">
+                                    <i class="fa-heart {{ $post->isLikedBy(Auth::user()) ? 'text-red-500 fas' : 'text-gray-500 far' }}"></i>
+                                    <span class="{{ $post->isLikedBy(Auth::user()) ? 'text-red-500' : 'text-gray-500' }}">{{ $post->likes()->count() }}</span>
+                                </div>
+                                <!-- ビュー数 -->
+                                <div>
+                                    <i class="fa-eye text-gray-500 fas"></i>
+                                    <span>{{ $post->totalViewCounts->sum('view_count') }}</span>
+                                </div>
                             </div>
-                            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-                            <script src="{{ asset('js/like.js') }}"></script> -->
-                            <!-- ビュー数 -->
-                            <!-- <div>
-                                <i class="fa-eye text-gray-500 fas"></i>
-                                <span class="text-gray-500">{{ $postTotalPageViewCount }}</span>
-                            </div> -->
-                        </div>
-                        <!-- type -->
-                        <a class="" href="{{ route('post.show', $post) }}">
+                            <!-- type -->
                             <p class="text-lg text-gray-700 mt-3 sm:mt-6 break-all">
                                 {{ $post->type }}
                             </p>
-                        </a>
-                        <!-- genre -->
-                        <a class="" href="{{ route('post.show', $post) }}">
+                            <!-- genre -->
                             <p class="text-lg text-gray-700 mt-3 sm:mt-6 break-all">
                                 @foreach($post->tags as $tag)
                                 {{ $tag->name }}
                                 @endforeach
                             </p>
-                        </a>
+                        </div>
                     </div>
-                </div>
+                </a>
                 @endforeach
             </div>
         </div>

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Episode;
 use App\Models\Post;
-use App\Models\PostRanking;
+use App\Models\TotalViewCount;
 use Illuminate\Support\Facades\Cookie;
 use App\Models\EpImage;
 use Illuminate\Http\Request;
@@ -31,13 +31,15 @@ class EpisodeController extends Controller
 
         $episodes = $episodes->get();
 
-        $chapterPageViewCounts = PostRanking::where('page', 'LIKE', '/post/' . $post->id . '/chapter/%')
+        $chapterPageViewCounts = TotalViewCount::where('page_path', 'LIKE', '%/post/' . $post->id . '/chapter/%')
             ->get()
-            ->groupBy(function ($item) {
-                return explode('/', $item->page)[4]; // chapterの番号を取得
+            ->groupBy(function ($item) use ($post) {
+                $pattern = '/\/post\/' . $post->id . '\/chapter\/(\d+)/';
+                preg_match($pattern, $item->page_path, $matches);
+                return $matches[1] ?? '';
             })
             ->map(function ($group) {
-                return $group->sum('page_view_count');
+                return $group->sum('view_count');
             });
 
         return view('episode.index', compact('episodes', 'post', 'chapterPageViewCounts'));
