@@ -12,6 +12,7 @@ use Aws\S3\S3Client;
 use Carbon\Carbon;
 use Google\Cloud\Storage\StorageClient;
 use App\Models\TotalViewCount;
+use Illuminate\Support\Facades\Storage;
 
 
 class PostController extends Controller
@@ -94,24 +95,11 @@ class PostController extends Controller
 
             $name = date('Ymd_His') . '.' . $type;
 
-            // Create an Amazon S3 client
-            $s3 = new S3Client([
-                'version' => 'latest',
-                'region'  => 'ap-northeast-1',
-                'credentials' => [
-                    'key'    => config('filesystems.disks.s3.key'),
-                    'secret' => config('filesystems.disks.s3.secret'),
-                ],
-            ]);
+            // Save the file to the public disk
+            Storage::disk('public')->put('cover_images/' . $name, $data);
 
-            // Upload the file to the bucket
-            $result = $s3->putObject([
-                'Bucket' => config('filesystems.disks.s3.bucket'),
-                'Key'    => 'cover_images/' . $name,
-                'Body'   => $data,
-            ]);
-            // Get the public URL of the uploaded file
-            $post->cover_image = $result['ObjectURL'];
+            // Get the public URL of the saved file
+            $post->cover_image = asset('storage/cover_images/' . $name);
         } else {
             return back()->with('error', 'Invalid image format');
         }
@@ -269,24 +257,11 @@ class PostController extends Controller
 
                 $name = date('Ymd_His') . '.' . $type;
 
-                // Create an Amazon S3 client
-                $s3 = new S3Client([
-                    'version' => 'latest',
-                    'region'  => env('AWS_DEFAULT_REGION'),
-                    'credentials' => [
-                        'key'    => env('AWS_ACCESS_KEY_ID'),
-                        'secret' => env('AWS_SECRET_ACCESS_KEY'),
-                    ],
-                ]);
+                // Save the file to the public disk
+                Storage::disk('public')->put('cover_images/' . $name, $data);
 
-                // Upload the file to the bucket
-                $result = $s3->putObject([
-                    'Bucket' => env('AWS_BUCKET'),
-                    'Key'    => 'cover_images/' . $name,
-                    'Body'   => $data,
-                ]);
-                // Get the public URL of the uploaded file
-                $post->cover_image = $result['ObjectURL'];
+                // Get the public URL of the saved file
+                $post->cover_image = asset('storage/cover_images/' . $name);
             } else {
                 return back()->with('error', 'Invalid image format');
             }
@@ -336,14 +311,8 @@ class PostController extends Controller
             return redirect()->route('mymanga')->with('error', 'You are not authorized to delete this post.');
         }
 
-        $storage = new StorageClient([
-            'projectId' => env('GOOGLE_CLOUD_PROJECT_ID'),
-            'keyFilePath' => env('GOOGLE_CLOUD_KEY_FILE'),
-        ]);
-        $bucket = $storage->bucket(env('GOOGLE_CLOUD_BUCKET_NAME'));
-        $objectName = 'cover_images/' . basename($post->cover_image);
-        $object = $bucket->object($objectName);
-        $object->delete();
+        // Delete the file from the public disk
+        Storage::disk('public')->delete('cover_images/' . basename($post->cover_image));
 
         foreach ($post->episodes as $episode) {
             $episode->ep_images()->where('post_id', $post->id)->delete();

@@ -12,13 +12,11 @@
     <link href="{{ asset('downloads/comi_style.css') }}" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
-        /** 入力ここから **/
         var imgtype = "png,jpg"; //画像の拡張子
         var title = "{{$episode->title}}"; //タイトル名
         var site = "{{ url('post/' . $post->id) }}";
         var copy = "{{$post->user->name}}"; //作者名
         var display = 0; //左ページ始まりは「0」、右ページ始まりは「1」
-        /* *ここまで **/
 
         $(function() {
             var maxLength = 15; // ここで最大の文字数を設定します

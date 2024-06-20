@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Aws\S3\S3Client;
 use App\Rules\UniqueEpisodeNumber;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Storage;
 
 
 class EpisodeController extends Controller
@@ -97,14 +98,6 @@ class EpisodeController extends Controller
         $episode->number = $request->input('episode_number');
 
         // カバー画像の保存
-        $s3 = new S3Client([
-            'version' => 'latest',
-            'region'  => env('AWS_DEFAULT_REGION'),
-            'credentials' => [
-                'key'    => env('AWS_ACCESS_KEY_ID'),
-                'secret' => env('AWS_SECRET_ACCESS_KEY'),
-            ],
-        ]);
         if (request('cropped_ep_cover_image')) {
             if (preg_match('/^data:image\/(\w+);base64,/', request('cropped_ep_cover_image'), $type)) {
                 $data = substr(request('cropped_ep_cover_image'), strpos(request('cropped_ep_cover_image'), ',') + 1);
@@ -117,14 +110,10 @@ class EpisodeController extends Controller
                     throw new \Exception('base64_decode failed');
                 }
                 $name = date('Ymd_His') . '.' . $type;
-                // Amazon S3に画像をアップロード
-                $result = $s3->putObject([
-                    'Bucket' => env('AWS_BUCKET'),
-                    'Key'    => 'ep_cover_images/' . $name,
-                    'Body'   => $data,
-                ]);
-                // Get the public URL of the uploaded file
-                $episode->cover_image = $result['ObjectURL'];
+                // Save the file to the public disk
+                Storage::disk('public')->put('ep_cover_images/' . $name, $data);
+                // Get the public URL of the saved file
+                $episode->cover_image = asset('storage/ep_cover_images/' . $name);
             } else {
                 return back()->with('error', 'Invalid image format');
             }
@@ -133,34 +122,19 @@ class EpisodeController extends Controller
         }
         $episode->save();
 
-
         // Episode Imageの保存
         $epImages = [];
         $episodeNumber = $request->input('episode_number');
         // 画像の順序情報を取得
         $imageOrder = explode(',', $request->input('image_order'));
-        // Create an Amazon S3 client
-        $s3 = new S3Client([
-            'version' => 'latest',
-            'region'  => env('AWS_DEFAULT_REGION'),
-            'credentials' => [
-                'key'    => env('AWS_ACCESS_KEY_ID'),
-                'secret' => env('AWS_SECRET_ACCESS_KEY'),
-            ],
-        ]);
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $key => $image) {
                 $imageName = date('Ymd_His') . '_' . $image->getClientOriginalName();
 
-                // Amazon S3に画像をアップロード
-                $result = $s3->putObject([
-                    'Bucket' => env('AWS_BUCKET'),
-                    'Key'    => 'ep_images/' . $imageName,
-                    'Body'   => file_get_contents($image->getRealPath()),
-                    'ContentType' => $image->getMimeType()
-                ]);
+                // Save the file to the public disk
+                Storage::disk('public')->put('ep_images/' . $imageName, file_get_contents($image->getRealPath()));
 
-                $imageURL = $result['ObjectURL'];
+                $imageURL = asset('storage/ep_images/' . $imageName);
 
                 $epImages[] = [
                     'image' => $imageURL,
@@ -286,16 +260,7 @@ class EpisodeController extends Controller
         $episode->progress = $request->input('progress');
         $episode->number = $request->input('episode_number');
 
-
         // カバー画像の保存
-        $s3 = new S3Client([
-            'version' => 'latest',
-            'region'  => env('AWS_DEFAULT_REGION'),
-            'credentials' => [
-                'key'    => env('AWS_ACCESS_KEY_ID'),
-                'secret' => env('AWS_SECRET_ACCESS_KEY'),
-            ],
-        ]);
         if (preg_match('/^data:image\/(\w+);base64,/', request('cropped_ep_cover_image'), $type)) {
             $data = substr(request('cropped_ep_cover_image'), strpos(request('cropped_ep_cover_image'), ',') + 1);
             $type = strtolower($type[1]); // jpg, png, gif
@@ -312,31 +277,23 @@ class EpisodeController extends Controller
 
             $name = date('Ymd_His') . '.' . $type;
 
-            // Amazon S3に画像をアップロード
-            $result = $s3->putObject([
-                'Bucket' => env('AWS_BUCKET'),
-                'Key'    => 'ep_cover_images/' . $name,
-                'Body'   => $data,
-            ]);
+            // Save the file to the public disk
+            Storage::disk('public')->put('ep_cover_images/' . $name, $data);
 
-            // Get the public URL of the uploaded file
-            $episode->cover_image = $result['ObjectURL'];
+            // Get the public URL of the saved file
+            $episode->cover_image = asset('storage/ep_cover_images/' . $name);
         } else {
             $episode->cover_image = request('old_ep_cover_image');
         }
 
         $episode->save();
 
-
         // エピソードの画像を更新
         // 既存の画像を削除
         $epImages = $episode->ep_images;
         foreach ($epImages as $epImage) {
-            // Amazon S3から画像を削除
-            $s3->deleteObject([
-                'Bucket' => env('AWS_BUCKET'),
-                'Key'    => $epImage->image
-            ]);
+            // Delete the file from the public disk
+            Storage::disk('public')->delete('ep_images/' . basename($epImage->image));
 
             // データベースからEpImageレコードを削除
             $epImage->delete();
@@ -355,15 +312,10 @@ class EpisodeController extends Controller
             foreach ($request->file('images') as $key => $image) {
                 $imageName = date('Ymd_His') . '_' . $image->getClientOriginalName();
 
-                // Amazon S3に画像をアップロード
-                $result = $s3->putObject([
-                    'Bucket' => env('AWS_BUCKET'),
-                    'Key'    => 'ep_images/' . $imageName,
-                    'Body'   => file_get_contents($image->getRealPath()),
-                    'ContentType' => $image->getMimeType()
-                ]);
+                // Save the file to the public disk
+                Storage::disk('public')->put('ep_images/' . $imageName, file_get_contents($image->getRealPath()));
 
-                $imageURL = $result['ObjectURL'];
+                $imageURL = asset('storage/ep_images/' . $imageName);
 
                 $epImages[] = [
                     'image' => $imageURL,
@@ -378,6 +330,7 @@ class EpisodeController extends Controller
             EpImage::create($epImage);
         }
 
+
         return redirect()->route('mymanga')->with('message', 'Chapter updated successfully');
     }
 
@@ -387,32 +340,18 @@ class EpisodeController extends Controller
             abort(403);
         }
 
-        // Amazon S3の設定
-        $s3 = new S3Client([
-            'version' => 'latest',
-            'region'  => env('AWS_DEFAULT_REGION'),
-            'credentials' => [
-                'key'    => env('AWS_ACCESS_KEY_ID'),
-                'secret' => env('AWS_SECRET_ACCESS_KEY'),
-            ],
-        ]);
-
         // エピソードのカバー画像を削除
-        $coverImageName = str_replace($s3->getObjectUrl(env('AWS_BUCKET'), 'ep_cover_images/'), '', $episode->cover_image);
-        $s3->deleteObject([
-            'Bucket' => env('AWS_BUCKET'),
-            'Key'    => 'ep_cover_images/' . $coverImageName
-        ]);
+        $coverImageName = basename($episode->cover_image);
+        // Delete the file from the public disk
+        Storage::disk('public')->delete('ep_cover_images/' . $coverImageName);
 
         // エピソードの画像を削除
         $epImages = $episode->epImages;
         if ($epImages) {
             foreach ($epImages as $epImage) {
-                $imageName = str_replace($s3->getObjectUrl(env('AWS_BUCKET'), 'ep_images/'), '', $epImage->image);
-                $s3->deleteObject([
-                    'Bucket' => env('AWS_BUCKET'),
-                    'Key'    => 'ep_images/' . $imageName
-                ]);
+                $imageName = basename($epImage->image);
+                // Delete the file from the public disk
+                Storage::disk('public')->delete('ep_images/' . $imageName);
             }
         }
 

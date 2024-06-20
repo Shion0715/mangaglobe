@@ -44,7 +44,7 @@
                     <label for="avatar"></label>
                 </div>
                 <div class="mt-4 max-w-[200px] max-h-auto overflow-hidden">
-                    <img id="avatar_preview" src="{{ Storage::disk('s3')->url('avatar/user_default.jpg') }}" class="object-contain">
+                    <img id="avatar_preview" src="{{ asset('storage/avatar/user_default.jpg') }}" class="object-contain">
                 </div>
             </div>
         </div>

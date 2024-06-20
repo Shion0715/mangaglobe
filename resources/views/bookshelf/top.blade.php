@@ -55,7 +55,7 @@
                                         <div class="flex mt-5">
                                             <div class="w-8 h-8">
                                                 {{-- アバター表示 --}}
-                                                <img id="avatar_preview" src="{{ $post->user->avatar ? $post->user->avatar : 'https://mangaglobe-bucket.s3.amazonaws.com/avatar/user_default.jpg' }}" class="object-contain">
+                                                <img id="avatar_preview" src="{{ $post->user->avatar ? asset('storage/'.$post->user->avatar) : asset('storage/avatar/user_default.jpg') }}" class="object-contain">
                                             </div>
                                             <!-- 名前 -->
                                             <h1 class="text-lg text-gray-700 font-nomal hover:underline m-1 cursor-pointer float-left index-user-name">
@@ -97,7 +97,7 @@
                                         <div class="flex mt-5">
                                             <div class=" w-8 h-18">
                                                 {{-- アバター表示 --}}
-                                                <img id="avatar_preview" src="{{ $like->post->user->avatar ? $like->post->user->avatar : 'https://mangaglobe-bucket.s3.amazonaws.com/avatar/user_default.jpg' }}" class="object-contain">
+                                                <img id="avatar_preview" src="{{ $post->user->avatar ? asset('storage/'.$post->user->avatar) : asset('storage/avatar/user_default.jpg') }}" class="object-contain">
                                             </div>
                                             <!-- 名前 -->
                                             <h1 class="text-lg text-gray-700 font-nomal hover:underline m-1 ml-1 sm:ml-2 cursor-pointer float-left index-user-name">

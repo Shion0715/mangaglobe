@@ -34,7 +34,7 @@
                     <div class="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-5 xl:gap-20">
                         @foreach ($likes as $like)
                         <div class="flex flex-col item-center mt-1 m-3 mx-auto">
-                        @if($like->post)
+                            @if($like->post)
                             <a href="{{ route('post.show', $like->post) }}">
                                 <img src="{{ $like->post->cover_image }}" class="" style="height:auto; width:160px">
                             </a>
@@ -47,7 +47,7 @@
                             <div class="flex mt-3">
                                 <!-- アバター -->
                                 <div class="w-6 h-6 sm:w-9 sm:h-9 overflow-hidden">
-                                    <img id="avatar_preview" src="{{ $like->post->user->avatar ? $like->post->user->avatar : 'https://mangaglobe-bucket.s3.amazonaws.com/avatar/user_default.jpg' }}" class="object-contain">
+                                    <img id="avatar_preview" src="{{ $like->post->user->avatar ? asset('storage/'.$like->post->user->avatar) : asset('storage/avatar/user_default.jpg') }}" class="object-contain">
                                 </div>
                                 <!-- 名前 -->
                                 <h1 class="text-lg text-gray-700 font-normal hover:underline ml-2 sm:mt-2 bookshelf-user-name">

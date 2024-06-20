@@ -38,7 +38,7 @@
                         </p>
                         <div class="rounded-full w-8 h-8 sm:w-9 h-9">
                             {{-- アバター表示 --}}
-                            <img id="avatar_preview" src="{{ $post->user->avatar ? $post->user->avatar : 'https://mangaglobe-bucket.s3.amazonaws.com/avatar/user_default.jpg' }}" class="object-contain">
+                            <img id="avatar_preview" src="{{ $post->user->avatar ? asset('storage/'.$post->user->avatar) : asset('storage/avatar/user_default.jpg') }}" class="object-contain">
                         </div>
                         <!-- 名前 -->
                         <p class="mt-1 ml-3 break-words">
@@ -115,7 +115,7 @@
                     <div class="flex items-center">
                         <div class="flex-shrink-0">
                             <!-- Replace with user avatar -->
-                            <img class="h-10 w-10" src="{{ $post->user->avatar ? $post->user->avatar : 'https://mangaglobe-bucket.s3.amazonaws.com/avatar/user_default.jpg' }}" class="object-contain">
+                            <img class="h-10 w-10" src="{{ $post->user->avatar ? asset('storage/'.$post->user->avatar) : asset('storage/avatar/user_default.jpg') }}" class="object-contain">
                         </div>
                         <div class="ml-3">
                             <p class="text-sm font-medium text-gray-900">
@@ -177,7 +177,7 @@
 
                             var formData = $(this).serialize();
                             var form = this;
-                            form.reset(); // フォームのリセット
+                            form.reset(); 
 
                             $.ajax({
                                 url: "{{ route('comment.store') }}",

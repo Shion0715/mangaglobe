@@ -3,25 +3,43 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex h-16">
 
+            <!-- Logo -->
+            <div class="shrink-0 flex items-center">
+                <a href="{{ route('post.index') }}">
+                    <!-- <img src="{{asset('logo/23379777.jpg')}}" style="max-height:70px;"> -->
+                </a>
+            </div>
+
             <!-- Navigation Links -->
             <div class="sm:-my-px sm:mr-10 sm:flex inline-flex items-center px-1 pt-1 text-xl font-medium leading-5;">
                 <a href="{{ route('post.index') }}">MangaGlobe</a>
             </div>
             <div class="flex ml-auto items-center">
-            
-                <form action="{{ route('search') }}" method="GET" class="hidden sm:flex items-center max-w-sm mx-auto">
-                    <label for="simple-search" class="sr-only">Search</label>
-                    <div class="relative w-full">
-                        <input type="text" id="simple-search" name="query" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full  p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Manga Title : Author" required />
+                <div class="sm:-my-px sm:flex inline-flex items-center px-1 pt-1 text-xl font-medium leading-5;">
+                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                        <x-nav-link :href="route('workspace')" :active="request()->routeIs('workspace')">
+                            Workspace
+                        </x-nav-link>
+                        <x-nav-link :href="route('bookshelf.top')" :active="request()->routeIs('bookshelf.top')|| request()->routeIs('bookshelf.favorite') || request()->routeIs('bookshelf.history')">
+                            Bookshelf
+                        </x-nav-link>
+                        <x-nav-link :href="route('profile.edit')" :active="request()->routeIs('profile.edit') || request()->routeIs('profile.show')">
+                            My Page
+                        </x-nav-link>
+                        <form action="{{ route('search') }}" method="GET" class="flex items-center max-w-sm mx-auto">
+                            <label for="simple-search" class="sr-only">Search</label>
+                            <div class="relative w-full">
+                                <input type="text" id="simple-search" name="query" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full  p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Manga Title : Author" required />
+                            </div>
+                            <button type="submit" class="p-2.5 ms-2 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                                </svg>
+                                <span class="sr-only">Search</span>
+                            </button>
+                        </form>
                     </div>
-                    <button type="submit" class="p-2.5 ms-2 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                        <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-                        </svg>
-                        <span class="sr-only">Search</span>
-                    </button>
-                </form>
-
+                </div>
 
                 <!-- Settings Dropdown -->
                 <div class="hidden sm:flex sm:items-center sm:ml-6">
@@ -49,21 +67,12 @@
                         </x-slot>
 
                         <x-slot name="content">
-                            <x-dropdown-link :href="route('workspace')" :active="request()->routeIs('workspace')">
-                                Workspace
-                            </x-dropdown-link>
-                            <x-dropdown-link :href="route('bookshelf.top')" :active="request()->routeIs('bookshelf.top')|| request()->routeIs('bookshelf.favorite') || request()->routeIs('bookshelf.history')">
-                                Bookshelf
-                            </x-dropdown-link>
-                            <x-dropdown-link :href="route('profile.edit')" :active="request()->routeIs('profile.edit') || request()->routeIs('profile.show')">
-                                My Page
-                            </x-dropdown-link>
 
                             <!-- Authentication -->
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
                                 <x-dropdown-link :href="route('logout')" onclick="event.preventDefault();
-                this.closest('form').submit();">
+                    this.closest('form').submit();">
                                     {{ __('Log Out') }}
                                 </x-dropdown-link>
                             </form>

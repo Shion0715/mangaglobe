@@ -16,7 +16,7 @@
             <div class="px-4 py-5 sm:px-6">
                 <div class="flex items-center">
                     <!-- Replace with user avatar -->
-                    <img class="h-7 w-7 sm:h-9 sm:w-9" src="{{ $post->user->avatar ? $post->user->avatar : 'https://mangaglobe-bucket.s3.amazonaws.com/avatar/user_default.jpg' }}" class="object-contain">
+                    <img class="h-7 w-7 sm:h-9 sm:w-9" src="{{ $post->user->avatar ? asset('storage/'.$post->user->avatar) : asset('storage/avatar/user_default.jpg') }}" class="object-contain">
                     <h3 class="text-md sm:text-base ml-2 sm:ml-3 leading-6 font-medium text-gray-900">{{ $comment->user->name }}</h3>
                     <p class="text-xs sm:text-sm ml-2 sm:ml-3 mt-1 leading-6 font-medium text-gray-500">{{ $comment->id }}</p>
                 </div>

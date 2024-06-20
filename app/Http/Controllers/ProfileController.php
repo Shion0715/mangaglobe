@@ -66,37 +66,20 @@ class ProfileController extends Controller
                     throw new \Exception('base64_decode failed');
                 }
 
-                // Amazon S3に画像をアップロード
-                $s3 = new S3Client([
-                    'version' => 'latest',
-                    'region'  => env('AWS_DEFAULT_REGION'),
-                    'credentials' => [
-                        'key'    => env('AWS_ACCESS_KEY_ID'),
-                        'secret' => env('AWS_SECRET_ACCESS_KEY'),
-                    ],
-                ]);
-
                 // 既存の画像を削除
                 if ($request->user()->avatar) {
-                    $oldName = str_replace('https://' . env('AWS_BUCKET') . '.s3.' . env('AWS_REGION') . '.amazonaws.com/', '', $request->user()->avatar);
-                    $s3->deleteObject([
-                        'Bucket' => env('AWS_BUCKET'),
-                        'Key' => $oldName
-                    ]);
+                    $oldName = basename($request->user()->avatar);
+                    Storage::disk('public')->delete('avatar/' . $oldName);
                 }
 
                 // ユーザーIDを使用して画像を一意に命名
                 $name = 'avatar/' . Str::random(10) . '_' . date('Ymd_His') . '.' . $type;
 
-                $s3->putObject([
-                    'Bucket' => env('AWS_BUCKET'),
-                    'Key'    => $name,
-                    'Body'   => $data,
-                    'ContentType' => 'image/' . $type // コンテンツタイプの設定
-                ]);
+                // Save the image to the public disk
+                Storage::disk('public')->put($name, $data);
 
                 // 画像の公開URLを取得
-                $avatarUrl = $s3->getObjectUrl(env('AWS_BUCKET'), $name);
+                $avatarUrl = Storage::disk('public')->url($name);
 
                 // データベースに保存
                 $user = $request->user();
@@ -137,17 +120,4 @@ class ProfileController extends Controller
         return view('profile.index', compact('users'));
     }
 
-    // public function deleteAvatar(): RedirectResponse
-    // {
-    //     $user = auth()->user();
-
-    //     // アバターがデフォルトの画像ではない場合、削除します
-    //     if ($user->avatar !== 'default.jpeg') {
-    //         Storage::delete('public/avatar/' . $user->avatar);
-    //         $user->avatar = 'default.jpeg';
-    //         $user->save();
-    //     }
-
-    //     return redirect()->route('profile.edit')->with('status', 'Avatar deleted successfully');
-    // }
 }
