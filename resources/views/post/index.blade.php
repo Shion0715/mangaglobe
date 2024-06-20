@@ -32,7 +32,6 @@
                                             </h1>
                                             <div class="flex mt-3">
                                                 <!-- アバター -->
-                                                {{ dd(asset('storage/avatar/'.$post->user->avatar)) }}
                                                 <div class="w-7 h-7 sm:w-9 h-9 overflow-hidden">
                                                     <img id="avatar_preview" src="{{ $post->user->avatar ? asset('storage/'.$post->user->avatar) : asset('storage/avatar/user_default.jpg') }}" class="object-contain">
                                                 </div>
